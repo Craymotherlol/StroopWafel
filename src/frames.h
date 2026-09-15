@@ -1,4 +1,5 @@
-#pragma once
+#ifndef STROOPWAFEL_FRAMES_IMGUI_H
+#define STROOPWAFEL_FRAMES_IMGUI_H
 #include <toml++/toml.hpp>
 #include "window.h"
 
@@ -10,3 +11,5 @@ public:
 //private:
 //    GLFWwindow* window;
 };
+
+#endif

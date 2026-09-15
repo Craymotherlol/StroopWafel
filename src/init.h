@@ -1,4 +1,6 @@
-#pragma once
+#ifndef STROOPWAFEL_INITIALIZATION_H
+#define STROOPWAFEL_INITIALIZATION_H
+
 #include <toml++/toml.hpp>
 #include <filesystem>
 #include <string>
@@ -10,3 +12,5 @@ class StroopConfig {
         static void Setup();
         static void SetImGuiStyle(ImGuiStyle &style) noexcept;
 };
+
+#endif

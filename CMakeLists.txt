@@ -19,35 +19,12 @@ endif()
 
 message("${CMAKE_PROJECT_NAME}: Fetching binaries..")
 
-FetchContent_Declare(
-    glfw
-    GIT_REPOSITORY https://github.com/glfw/glfw.git
-    GIT_TAG 3.5.1
-)
+FetchContent_Declare(glfw GIT_REPOSITORY https://github.com/glfw/glfw.git GIT_TAG 3.5.1)
+FetchContent_Declare(glew GIT_REPOSITORY https://github.com/Perlmint/glew-cmake.git GIT_TAG glew-cmake-2.3.1)
+FetchContent_Declare(glm GIT_REPOSITORY https://github.com/g-truc/glm.git GIT_TAG 1.0.3)
+FetchContent_Declare(imgui GIT_REPOSITORY https://github.com/ocornut/imgui.git GIT_TAG docking  )
+FetchContent_Declare(tomlplusplus GIT_REPOSITORY https://github.com/marzer/tomlplusplus.git GIT_TAG v3.4.0)
 
-FetchContent_Declare(
-    glew
-    GIT_REPOSITORY https://github.com/Perlmint/glew-cmake.git
-    GIT_TAG glew-cmake-2.3.1
-)
-
-FetchContent_Declare(
-    glm
-    GIT_REPOSITORY https://github.com/g-truc/glm.git
-    GIT_TAG 1.0.3   
-)
-
-FetchContent_Declare(
-    imgui
-    GIT_REPOSITORY https://github.com/ocornut/imgui.git
-    GIT_TAG docking  
-)
-
-FetchContent_Declare(
-    tomlplusplus
-    GIT_REPOSITORY https://github.com/marzer/tomlplusplus.git
-    GIT_TAG v3.4.0
-)
 
 FetchContent_MakeAvailable(glfw glew glm imgui tomlplusplus)
 
@@ -57,6 +34,8 @@ message("${CMAKE_PROJECT_NAME}: Binaries fetched.")
 file(GLOB SOURCES
     src/*.h
     src/*.cpp
+    src/opengl/*.h
+    src/opengl/*.cpp
 )
 
 add_executable(StroopWafel ${SOURCES})
