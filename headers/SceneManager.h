@@ -3,7 +3,7 @@
 #include "window.h"
 
 
-enum SCENES {
+enum SCENES : int {
     MAINMENU,
     CLYKE_LVLEDIT,
     CLYKE_RESVIEW
@@ -18,3 +18,4 @@ public:
 //private:
 //    GLFWwindow* window;
 };
+

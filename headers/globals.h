@@ -4,3 +4,4 @@
 #include <vector>
 
 extern const bool DEBUG;
+extern int CURRENT_SCENE;

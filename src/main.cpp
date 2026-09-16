@@ -4,7 +4,7 @@
 #include <fstream>
 
 const bool DEBUG = true;
-SCENES CURRENT_SCENE = MAINMENU;
+int CURRENT_SCENE = MAINMENU;
 
 void framebuffer_size_callback(GLFWwindow *window, int width, int height)
 {
@@ -25,7 +25,6 @@ unsigned int indices[] = {
 
 int main(void)
 {
-
     StroopConfig::Setup();
     GLFWwindow *window;
     WindowOptions options;
@@ -107,6 +106,8 @@ int main(void)
         rectangle.shaders.Activate();
         rectangle.mesh.vao.Bind();
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
+        FramesGUI::MainMenu(window);
 
         // RENDER END
         ImGui::Render();

@@ -35,7 +35,7 @@ void FramesGUI::MainMenu(GLFWwindow *window)
 	text = "LEVEL EDITOR (CETTALYKE)";
 
 	if (ImGui::Button(text.c_str(), ImVec2(300, 50))) {
-		CURRENT_FRAME = CLYKE_LVLEDITOR;
+		CURRENT_SCENE = CLYKE_LVLEDIT;
 	}
 
 	ImGui::End();
