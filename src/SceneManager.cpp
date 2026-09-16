@@ -1,7 +1,7 @@
 #include "globals.h"
 #include <iostream>
 #include <string>
-#include "frames.h"
+#include "SceneManager.h"
 
 
 //FramesGUI::FramesGUI(GLFWwindow *w)

@@ -1,7 +1,14 @@
-#ifndef STROOPWAFEL_FRAMES_IMGUI_H
-#define STROOPWAFEL_FRAMES_IMGUI_H
+#pragma once
 #include <toml++/toml.hpp>
 #include "window.h"
+
+
+enum SCENES {
+    MAINMENU,
+    CLYKE_LVLEDIT,
+    CLYKE_RESVIEW
+};
+
 
 class FramesGUI {
 public:
@@ -11,5 +18,3 @@ public:
 //private:
 //    GLFWwindow* window;
 };
-
-#endif

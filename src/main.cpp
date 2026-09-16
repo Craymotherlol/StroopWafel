@@ -4,7 +4,7 @@
 #include <fstream>
 
 const bool DEBUG = true;
-int CURRENT_FRAME = 0;
+SCENES CURRENT_SCENE = MAINMENU;
 
 void framebuffer_size_callback(GLFWwindow *window, int width, int height)
 {
@@ -19,10 +19,9 @@ float vertices[] = {
 
 unsigned int indices[] = {
     0, 1, 3,
-    1, 2, 3};
+    1, 2, 3
+};
 
-
-#define glCheckError() glCheckError_(__FILE__, __LINE__)
 
 int main(void)
 {
@@ -40,8 +39,7 @@ int main(void)
     options.WINDOWSIZE = {WINDOW_WIDTH, WINDOW_HEIGHT};
     options.WINDOWTITLE = "StroopWafel";
 
-    if (!glfwInit())
-        return -1;
+    if (!glfwInit()) return -1;
 
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
@@ -50,7 +48,7 @@ int main(void)
     int flags;
     glGetIntegerv(GL_CONTEXT_FLAGS, &flags);
 
-    window = glfwCreateWindow(options.WINDOWSIZE.x, options.WINDOWSIZE.y, options.WINDOWTITLE.c_str(), NULL, NULL);
+    window = glfwCreateWindow(static_cast<int>(options.WINDOWSIZE.x), static_cast<int>(options.WINDOWSIZE.y), options.WINDOWTITLE.c_str(), NULL, NULL);
 
     glfwMakeContextCurrent(window);
 
@@ -96,6 +94,8 @@ int main(void)
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
     {
+        glfwPollEvents();
+
         glClearColor(0.03f, 0.2f, 0.05f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
@@ -103,7 +103,6 @@ int main(void)
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
         // RENDER START
-        FramesGUI::MainMenu(window);
 
         rectangle.shaders.Activate();
         rectangle.mesh.vao.Bind();
@@ -115,7 +114,6 @@ int main(void)
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
         glfwSwapBuffers(window);
-        glfwPollEvents();
     }
 
     ImGui_ImplOpenGL3_Shutdown();

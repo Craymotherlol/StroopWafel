@@ -32,10 +32,8 @@ find_package(OpenGL REQUIRED)
 message("${CMAKE_PROJECT_NAME}: Binaries fetched.")
 
 file(GLOB SOURCES
-    src/*.h
     src/*.cpp
-    src/opengl/*.h
-    src/opengl/*.cpp
+    headers/*.h
 )
 
 add_executable(StroopWafel ${SOURCES})
@@ -60,6 +58,7 @@ target_include_directories(imgui PUBLIC
 )
 
 target_include_directories(StroopWafel PRIVATE
+    ${CMAKE_SOURCE_DIR}/headers
     ${glfw_SOURCE_DIR}/include
     ${glew_SOURCE_DIR}/include
     ${glm_SOURCE_DIR}

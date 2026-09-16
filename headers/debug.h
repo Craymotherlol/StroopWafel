@@ -2,7 +2,7 @@
 #define STROOPWAFEL_OPENGL_DEBUG_H
 
 #include <iostream>
-#include "../window.h"
+#include "window.h"
 
 GLenum glGetError();
 

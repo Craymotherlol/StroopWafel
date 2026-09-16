@@ -1,6 +1,7 @@
 #ifndef STROOPWAFEL_OPENGL_OBJECTS_H
 #define STROOPWAFEL_OPENGL_OBJECTS_H
 
+#include <string>
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
@@ -33,7 +34,7 @@ public:
     void Bind();
     void Unbind();
     void Delete();
-    void LinkVBO(VBO &vbo, unsigned int layout, int pointerSize);
+    void LinkVBO(VBO &vbo, unsigned int layout, uint32_t pointerSize);
 };
 
 class EBO
