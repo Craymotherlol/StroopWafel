@@ -4,7 +4,7 @@
 #include <fstream>
 
 const bool DEBUG = true;
-int CURRENT_SCENE = MAINMENU;
+int CURRENT_GUILAYOUT = MAINMENU;
 
 void framebuffer_size_callback(GLFWwindow *window, int width, int height)
 {
@@ -27,6 +27,7 @@ int main(void)
 {
     StroopConfig::Setup();
     GLFWwindow *window;
+    GLFWmonitor* monitor;
     WindowOptions options;
 
     auto cfg = StroopConfig::GetConfig();
@@ -34,11 +35,15 @@ int main(void)
     float WINDOW_WIDTH = cfg["WINDOW"]["WIDTH"].value_or<float>(1336);
     float WINDOW_HEIGHT = cfg["WINDOW"]["HEIGHT"].value_or<float>(768);
     int VSYNC = cfg["WINDOW"]["VSYNC"].value_or<int>(1);
+    int DisplayWidth, DisplayHeight;
 
     options.WINDOWSIZE = {WINDOW_WIDTH, WINDOW_HEIGHT};
     options.WINDOWTITLE = "StroopWafel";
 
     if (!glfwInit()) return -1;
+
+    monitor = glfwGetPrimaryMonitor();
+    const GLFWvidmode* video = glfwGetVideoMode(monitor);
 
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
@@ -47,9 +52,13 @@ int main(void)
     int flags;
     glGetIntegerv(GL_CONTEXT_FLAGS, &flags);
 
-    window = glfwCreateWindow(static_cast<int>(options.WINDOWSIZE.x), static_cast<int>(options.WINDOWSIZE.y), options.WINDOWTITLE.c_str(), NULL, NULL);
+    window = glfwCreateWindow(
+        static_cast<int>(((video->width - options.WINDOWSIZE.x) / 2)), 
+        static_cast<int>(((video->height - options.WINDOWSIZE.y) / 2)), 
+        options.WINDOWTITLE.c_str(), NULL, NULL);
 
     glfwMakeContextCurrent(window);
+
 
     GLenum err = glewInit();
     if (err != GLEW_OK)
@@ -107,7 +116,7 @@ int main(void)
         rectangle.mesh.vao.Bind();
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
-        FramesGUI::MainMenu(window);
+        GuiLayout::MainMenu();
 
         // RENDER END
         ImGui::Render();

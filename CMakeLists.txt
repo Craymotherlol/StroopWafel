@@ -31,7 +31,7 @@ FetchContent_MakeAvailable(glfw glew glm imgui tomlplusplus)
 find_package(OpenGL REQUIRED)
 message("${CMAKE_PROJECT_NAME}: Binaries fetched.")
 
-file(GLOB SOURCES
+file(GLOB_RECURSE SOURCES
     src/*.cpp
     headers/*.h
 )

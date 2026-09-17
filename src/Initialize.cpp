@@ -1,4 +1,4 @@
-#include "init.h"
+#include "Init.h"
 #include <iostream>
 #include <filesystem>
 
@@ -36,15 +36,15 @@ void StroopConfig::Setup()
 			if (cfg.contains("WINDOW")) {
 				std::cout << "\033[35m" << "[SUCCESS] "  << "\033[0m" << "Config: Parsed file" << "\n";
 			} else {
-				throw 1;
+				throw 001;
 			}
 		} catch (int error) {
-			std::cout << "\033[31m" << "[ERROR] "  << "\033[0m" << "Config: Failed to parse file" << "\n";
+			std::cout << "\033[31m" << "[ERROR]" << error << "\033[0m" << "Config: Failed to parse file" << "\n";
 		}
 
         if (cfg.contains("[WINDOW]"))
         {
-            toml::table tbl = *cfg["WINDOW"].as_table();
+            tbl = *cfg["WINDOW"].as_table();
 
             if (tbl.empty())
             {

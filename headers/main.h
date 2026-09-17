@@ -1,8 +1,7 @@
 #pragma once
-#include "window.h"
-#include "debug.h"
-#include "objects.h"
-#include "init.h"
+#include "Window.h"
+#include "Debug.h"
+#include "Objects.h"
+#include "Init.h"
 #include <string>
 #include <toml++/toml.hpp>
-#include "SceneManager.h"

@@ -4,7 +4,7 @@
 #include <toml++/toml.hpp>
 #include <filesystem>
 #include <string>
-#include "window.h"
+#include "Window.h"
 
 class StroopConfig {
     public:

@@ -1,7 +1,7 @@
 #include <string>
 #include <fstream>
 #include <iostream>
-#include "objects.h"
+#include "Objects.h"
 
 
 
@@ -23,7 +23,7 @@ void VAO::Delete() {
     glDeleteVertexArrays(1, &ID);
 }
 
-void VAO::LinkVBO(VBO& vbo, unsigned int layout, uint32_t pointerSize) {
+void VAO::LinkVBO(VBO& vbo, unsigned int layout, int pointerSize) {
     vbo.Bind();
     glVertexAttribPointer(layout, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*) pointerSize);
     glEnableVertexAttribArray(layout);

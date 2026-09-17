@@ -34,7 +34,7 @@ public:
     void Bind();
     void Unbind();
     void Delete();
-    void LinkVBO(VBO &vbo, unsigned int layout, uint32_t pointerSize);
+    void LinkVBO(VBO &vbo, unsigned int layout, int pointerSize);
 };
 
 class EBO
