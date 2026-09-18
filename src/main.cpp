@@ -4,7 +4,6 @@
 #include <fstream>
 
 const bool DEBUG = true;
-int CURRENT_GUILAYOUT = MAINMENU;
 
 void framebuffer_size_callback(GLFWwindow *window, int width, int height)
 {
@@ -22,13 +21,16 @@ unsigned int indices[] = {
     1, 2, 3
 };
 
-
 int main(void)
 {
     StroopConfig::Setup();
     GLFWwindow *window;
     GLFWmonitor* monitor;
     WindowOptions options;
+    GUIManager guimanager;
+
+    guimanager.AddLayout("menu", std::make_unique<MainMenuUI>(guimanager));
+    guimanager.AddLayout("lvleditor", std::make_unique<LevelEditorUI>());
 
     auto cfg = StroopConfig::GetConfig();
 
@@ -52,17 +54,16 @@ int main(void)
     int flags;
     glGetIntegerv(GL_CONTEXT_FLAGS, &flags);
 
-    window = glfwCreateWindow(
-        static_cast<int>(((video->width - options.WINDOWSIZE.x) / 2)), 
-        static_cast<int>(((video->height - options.WINDOWSIZE.y) / 2)), 
-        options.WINDOWTITLE.c_str(), NULL, NULL);
+    window = glfwCreateWindow(static_cast<int>(options.WINDOWSIZE.x), static_cast<int>(options.WINDOWSIZE.y), options.WINDOWTITLE.c_str(), NULL, NULL);
+    glfwSetWindowPos(window, static_cast<int>((video->width - options.WINDOWSIZE.x) / 2),static_cast<int>((video->height - options.WINDOWSIZE.y) / 2));
 
     glfwMakeContextCurrent(window);
-
 
     GLenum err = glewInit();
     if (err != GLEW_OK)
         exit(1);
+
+    guimanager.SetLayout("menu");
 
     if (flags & GL_CONTEXT_FLAG_DEBUG_BIT)
     {
@@ -73,6 +74,7 @@ int main(void)
     }
 
     glfwSwapInterval(VSYNC);
+
 
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
@@ -105,6 +107,9 @@ int main(void)
         glfwPollEvents();
 
         glClearColor(0.03f, 0.2f, 0.05f, 1.0f);
+        
+        guimanager.Update();
+
         glClear(GL_COLOR_BUFFER_BIT);
 
         ImGui_ImplOpenGL3_NewFrame();
@@ -116,8 +121,7 @@ int main(void)
         rectangle.mesh.vao.Bind();
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
-        GuiLayout::MainMenu();
-
+        guimanager.Render();
         // RENDER END
         ImGui::Render();
 

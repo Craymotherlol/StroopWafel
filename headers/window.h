@@ -7,7 +7,7 @@
 #include <imgui_impl_glfw.h>
 #include <string>
 //#include "SceneManager.h"
-#include "GuiLayout.h"
+#include "GUIManager.h"
 
 class WindowOptions {
 public:

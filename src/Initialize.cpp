@@ -22,8 +22,6 @@ void StroopConfig::Setup()
         VSYNC = 1
     )";
 
-	std::cout << "CURRENT DEBUGGING PATH: " << std::filesystem::current_path() << "\n";
-
     toml::table tbl = toml::parse(source);
 
     if (configExists("config.toml"))

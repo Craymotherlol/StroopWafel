@@ -5,3 +5,7 @@
 #include "Init.h"
 #include <string>
 #include <toml++/toml.hpp>
+#include <GUIManager.h>
+
+#include <GUIs/MainMenu.h>
+#include <GUIs/LevelEditor.h>
