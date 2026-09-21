@@ -1,24 +1,23 @@
-#include "globals.h"
 #include "main.h"
 #include <iostream>
 #include <fstream>
-
-const bool DEBUG = true;
+#include <vector>
 
 void framebuffer_size_callback(GLFWwindow *window, int width, int height)
 {
     glViewport(0, 0, width, height);
 }
 
-float vertices[] = {
-    0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f,
-    0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f,
-    -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f,
-    -0.5f, 0.5f, 0.0f, 0.0f, 0.0f, 1.0f};
+std::vector<Vertex> verts = {
+    {{-0.5f,-0.5f, 0.0f}, {0.0f, 0.0f, 1.0f, 1.0f}},
+    {{ 0.5f,-0.5f, 0.0f}, {0.0f, 1.0f, 0.0f, 0.5f}},
+    {{ 0.5f, 0.5f, 0.0f}, {1.0f, 0.0f, 0.0f, 1.0f}},
+    {{-0.5f, 0.5f, 0.0f}, {1.0f, 0.0f, 0.0f, 0.2f}},
+};
 
-unsigned int indices[] = {
+std::vector<unsigned int> indis = {
     0, 1, 3,
-    1, 2, 3
+    1, 2, 3,
 };
 
 int main(void)
@@ -28,6 +27,8 @@ int main(void)
     GLFWmonitor* monitor;
     WindowOptions options;
     GUIManager guimanager;
+
+    NFD::Init();
 
     guimanager.AddLayout("menu", std::make_unique<MainMenuUI>(guimanager));
     guimanager.AddLayout("lvleditor", std::make_unique<LevelEditorUI>());
@@ -42,6 +43,7 @@ int main(void)
     options.WINDOWSIZE = {WINDOW_WIDTH, WINDOW_HEIGHT};
     options.WINDOWTITLE = "StroopWafel";
 
+    
     if (!glfwInit()) return -1;
 
     monitor = glfwGetPrimaryMonitor();
@@ -49,7 +51,7 @@ int main(void)
 
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-    glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, DEBUG);
+    glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, 1);
 
     int flags;
     glGetIntegerv(GL_CONTEXT_FLAGS, &flags);
@@ -73,39 +75,32 @@ int main(void)
         //glDebugMessageControl(GL_DEBUG_SOURCE_API, GL_DONT_CARE, GL_DONT_CARE, 0, NULL, GL_TRUE);
     }
 
-    glfwSwapInterval(VSYNC);
+    Shader shader{"default.vert", "default.frag"};
+    Mesh mesh{verts, indis};
 
+    glfwSwapInterval(VSYNC);
 
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
     ImGuiIO &io = ImGui::GetIO();
+    io.IniFilename = NULL;
+    io.LogFilename = NULL;
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
     io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 
     ImGuiStyle &style = ImGui::GetStyle();
     StroopConfig::SetImGuiStyle(style);
 
-    GLObject rectangle{
-        "RECTANGLETEST",
-        Shader("default.vert", "default.frag"),
-        Mesh(vertices, sizeof(vertices), indices, sizeof(indices))};
-    // Vertexes
-    rectangle.mesh.vao.LinkVBO(rectangle.mesh.vbo, 0, 0);
-    // Color
-    rectangle.mesh.vao.LinkVBO(rectangle.mesh.vbo, 1, 3 * sizeof(float));
-
-    rectangle.UnbindAll();
-
     ImGui_ImplGlfw_InitForOpenGL(window, true);
     ImGui_ImplOpenGL3_Init();
 
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+    glfwSetKeyCallback(window, KeyboardCallback);
 
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
     {
         glfwPollEvents();
-
         glClearColor(0.03f, 0.2f, 0.05f, 1.0f);
         
         guimanager.Update();
@@ -117,8 +112,8 @@ int main(void)
         ImGui::NewFrame();
         // RENDER START
 
-        rectangle.shaders.Activate();
-        rectangle.mesh.vao.Bind();
+        shader.Use();
+        glBindVertexArray(mesh.VAO);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
         guimanager.Render();
@@ -126,18 +121,12 @@ int main(void)
         ImGui::Render();
 
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-
         glfwSwapBuffers(window);
     }
 
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplGlfw_Shutdown();
     ImGui::DestroyContext();
-
-    rectangle.mesh.vao.Delete();
-    rectangle.mesh.vbo.Delete();
-    rectangle.mesh.ebo.Delete();
-    rectangle.shaders.Delete();
 
     glfwDestroyWindow(window);
     glfwTerminate();

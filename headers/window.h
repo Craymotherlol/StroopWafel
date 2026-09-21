@@ -5,6 +5,8 @@
 #include <imgui.h>
 #include <imgui_impl_opengl3.h>
 #include <imgui_impl_glfw.h>
+#include <lib/nfd.hpp>
+#include <lib/nfd_glfw3.h>
 #include <string>
 //#include "SceneManager.h"
 #include "GUIManager.h"

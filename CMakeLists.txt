@@ -74,6 +74,7 @@ target_link_libraries(imgui PUBLIC
 
 target_link_libraries(StroopWafel PRIVATE
     glfw
+    nfd
     libglew_static
     OpenGL::GL
     imgui

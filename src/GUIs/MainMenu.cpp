@@ -7,8 +7,8 @@ void MainMenuUI::Begin() {
 };
 
 void MainMenuUI::End() {
+	glBindTexture(GL_TEXTURE_2D, 0);
 	glDeleteTextures(1, &logotex);
-	logotex = 0;
 };
 
 void MainMenuUI::Update(){

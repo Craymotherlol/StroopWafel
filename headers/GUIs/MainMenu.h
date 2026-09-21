@@ -1,13 +1,13 @@
 #include "../GUIManager.h"
 #include "Helpers/LoadTexture.h"
 
-// If you read this message this language really sucks at writing shit like this, hate it.
+// If you read this message this language really sucks, hate it. - Cray
 
 class MainMenuUI : public GUILayout
 {
 private:
     int logowidth, logoheight;
-    GLuint logotex;
+    unsigned int logotex;
     
     GUIManager& guimanager;
 public:
