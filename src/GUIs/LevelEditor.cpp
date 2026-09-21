@@ -1,3 +1,4 @@
+#include "GUIs/Toolbar.h"
 #include "GUIs/LevelEditor.h"
 #include "GUIManager.h"
 
@@ -11,6 +12,7 @@ void LevelEditorUI::Update() {};
 
 void LevelEditorUI::Render()
 {
+	ShowToolbar();
 	bool show = true;
 	int width, height;
 

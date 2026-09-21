@@ -1,5 +1,4 @@
 #include "GUIs/Toolbar.h"
-#include "Window.h"
 
 void ShowToolbar() {
     bool exit_modal = false;
@@ -12,7 +11,13 @@ void ShowToolbar() {
 		}
 		
 		if (ImGui::MenuItem("Open Level File..")) {
-            NFD::
+			nfdu8char_t *outPath;
+			nfdopendialogu8args_t args = {0};
+			nfdu8filteritem_t filters[2] = { { "Wafel Resource Data", "wrd" }, { "CettaLyke Level Layout", "cll" } };
+			args.filterList = filters;
+			args.filterCount = 2;
+			
+			nfdresult_t RESULT_FILE_NFD = NFD_OpenDialogU8_With(&outPath, &args);
 		}
 		
 		if (ImGui::MenuItem("Save")) {
@@ -44,7 +49,7 @@ void ShowToolbar() {
 		ImGui::PopStyleColor();
 		
 		if (ImGui::MenuItem("Style Editor")) {
-			styleEditor = !styleEditor;
+			std::cout << "hi";
 		}
 		
 			

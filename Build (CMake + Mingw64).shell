@@ -1,1 +1,0 @@
--DCMAKE_INSTALL_PREFIX=E:/Projects/Code/C++/StroopWafel/out/install/mingw64-ucrt64 -DCMAKE_C_COMPILER=C:/msys64/ucrt64/bin/gcc.exe -DCMAKE_CXX_COMPILER=C:/msys64/ucrt64/bin/g++.exe -DCMAKE_BUILD_TYPE=Debug -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE -S E:/Projects/Code/C++/StroopWafel -B E:/Projects/Code/C++/StroopWafel/out/build/mingw64-ucrt64 -G Ninja
