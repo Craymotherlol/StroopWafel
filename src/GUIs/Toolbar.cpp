@@ -3,6 +3,7 @@
 void ShowToolbar() {
     bool exit_modal = false;
 	
+	ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
 	ImGui::BeginMainMenuBar();
 	if (ImGui::BeginMenu("File")) {
 		
@@ -46,10 +47,8 @@ void ShowToolbar() {
 	}
 	
 	if (ImGui::BeginMenu("View")) {
-		ImGui::PopStyleColor();
 		
 		if (ImGui::MenuItem("Style Editor")) {
-			std::cout << "hi";
 		}
 		
 			
@@ -57,6 +56,7 @@ void ShowToolbar() {
 	}
 	
 	ImGui::EndMainMenuBar();
+	ImGui::PopStyleVar();
 };
 
 	

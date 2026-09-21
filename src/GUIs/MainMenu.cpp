@@ -12,6 +12,7 @@ void MainMenuUI::End() {
 };
 
 void MainMenuUI::Update(){
+	
 };
 
 void MainMenuUI::Render()
@@ -38,7 +39,13 @@ void MainMenuUI::Render()
 	ImGui::SetCursorPosX((windowSize.x - textSize.x) / 2);
 	ImGui::Text(text.c_str());
 
-	ImGui::Image((ImTextureID)logotex, ImVec2(logowidth / 2, logoheight / 2));
+	ImGui::Text("size = %d x %d", logowidth, logoheight);
+	//ImGui::SetCursorPosX((windowSize.x - (logowidth / 1.3)) / 2);
+
+	ImVec2 imagesize = ImageKeepRatio(&logotex, 600,400);
+
+	ImGui::SetCursorPosX((windowSize.x - imagesize.x) / 2);
+	ImGui::Image((ImTextureID)logotex, imagesize);
 
 	ImGui::SetCursorPosX((windowSize.x - 300) / 2);
 	text = "LEVEL EDITOR (CETTALYKE)";

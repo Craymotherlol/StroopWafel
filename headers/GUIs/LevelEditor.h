@@ -2,6 +2,9 @@
 
 class LevelEditorUI : public GUILayout
 {
+private:
+    bool leveleditor_built;
+    GLFWwindow *window;
 public:
     LevelEditorUI() {};
 

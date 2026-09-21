@@ -6,6 +6,9 @@
 void framebuffer_size_callback(GLFWwindow *window, int width, int height)
 {
     glViewport(0, 0, width, height);
+    ImGuiIO& io = ImGui::GetIO();
+    io.DisplayFramebufferScale = ImVec2(1.0f,1.0f);
+    io.DisplaySize = ImVec2(width,height);
 }
 
 std::vector<Vertex> verts = {
@@ -38,7 +41,6 @@ int main(void)
     float WINDOW_WIDTH = cfg["WINDOW"]["WIDTH"].value_or<float>(1336);
     float WINDOW_HEIGHT = cfg["WINDOW"]["HEIGHT"].value_or<float>(768);
     int VSYNC = cfg["WINDOW"]["VSYNC"].value_or<int>(1);
-    int DisplayWidth, DisplayHeight;
 
     options.WINDOWSIZE = {WINDOW_WIDTH, WINDOW_HEIGHT};
     options.WINDOWTITLE = "StroopWafel";
@@ -83,8 +85,8 @@ int main(void)
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
     ImGuiIO &io = ImGui::GetIO();
-    io.IniFilename = NULL;
-    io.LogFilename = NULL;
+    io.IniFilename = nullptr;
+    io.LogFilename = nullptr;
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
     io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 

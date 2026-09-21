@@ -24,7 +24,7 @@ bool LoadTextureFromMemory(const void *data, size_t data_size, GLuint *out_textu
 
     // Upload pixels into texture
     glPixelStorei(GL_UNPACK_ROW_LENGTH, 0);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image_width, image_height, 0, GL_RGBA, GL_UNSIGNED_BYTE, image_data);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, image_width, image_height, 0, GL_RGBA, GL_UNSIGNED_BYTE, image_data);
     stbi_image_free(image_data);
 
     *out_texture = image_texture;
@@ -73,4 +73,18 @@ bool LoadTextureFromFile(const char *file_name, GLuint *out_texture, int *out_wi
     bool ret = LoadTextureFromMemory(file_data, file_size, out_texture, out_width, out_height);
     IM_FREE(file_data);
     return ret;
+}
+
+ImVec2 ImageKeepRatio(GLuint* imagedata, int width, int height) {
+
+    int texW, texH;
+    glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_WIDTH, &texW);
+    glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_HEIGHT, &texH);
+
+	float ratio = std::min(static_cast<float>(width) / texW, static_cast<float>(height) / texH);
+
+	int display_w = texW * ratio;
+	int display_h = texH * ratio;
+
+    return ImVec2(display_w, display_h);
 }
