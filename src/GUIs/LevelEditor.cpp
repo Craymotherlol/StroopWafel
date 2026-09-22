@@ -15,7 +15,7 @@ void LevelEditorUI::Update() {};
 void LevelEditorUI::Render()
 {
 
-    ImGui::ShowStyleEditor();
+    //ImGui::ShowStyleEditor();
     ShowToolbar();
     ImGuiID node_id = ImGui::GetID("Workspace");
     ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove;
@@ -52,14 +52,14 @@ void LevelEditorUI::Render()
 
         ImGuiID dock5 = ImGui::DockBuilderSplitNode(dock4, ImGuiDir_Left, 0.1f, NULL, &dock4);
 
-        ImGuiID dock6 = ImGui::DockBuilderSplitNode(dock1, ImGuiDir_Up, 0.07f, NULL, &dock1);
+        //ImGuiID dock6 = ImGui::DockBuilderSplitNode(dock1, ImGuiDir_Up, 0.07f, NULL, &dock1);
 
         ImGui::DockBuilderDockWindow("Layers", dock1);
         ImGui::DockBuilderDockWindow("Viewport", dock2);
         ImGui::DockBuilderDockWindow("Properties", dock3);
         ImGui::DockBuilderDockWindow("Assets", dock4);
         ImGui::DockBuilderDockWindow("Selections", dock5);
-        ImGui::DockBuilderDockWindow("Toolbar", dock6);
+        //ImGui::DockBuilderDockWindow("Toolbar", dock6);
 
         ImGui::DockBuilderFinish(node_id);
 
@@ -70,27 +70,23 @@ void LevelEditorUI::Render()
     ImGui::Text("WIP");
     ImGui::End();
 
-    ImGui::Begin("Toolbar", NULL, window_flags);
-    ImGui::Text("WIP");
-    ImGui::End();
-
     ImGui::Begin("Assets");
 
-    if (ImGui::BeginTabBar("Assets"))
-    {
-        if (ImGui::BeginTabItem("Objects"))
-        {
-            ImGui::Text("WIP");
-            ImGui::EndTabItem();
-        }
+    //if (ImGui::BeginTabBar("Assets"))
+    //{
+    //    if (ImGui::BeginTabItem("Objects"))
+    //    {
+    //        ImGui::Text("WIP");
+    //        ImGui::EndTabItem();
+    //    }
 
-        if (ImGui::BeginTabItem("Enemies"))
-        {
-            ImGui::Text("WIP");
-            ImGui::EndTabItem();
-        }
-        ImGui::EndTabBar();
-    }
+    //    if (ImGui::BeginTabItem("Enemies"))
+    //    {
+    //        ImGui::Text("WIP");
+    //        ImGui::EndTabItem();
+    //    }
+    //    ImGui::EndTabBar();
+    //}
     ImGui::End();
 
     ImGui::Begin("Viewport",  NULL, ImGuiWindowFlags_NoDecoration);

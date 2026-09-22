@@ -39,7 +39,6 @@ void MainMenuUI::Render()
 	ImGui::SetCursorPosX((windowSize.x - textSize.x) / 2);
 	ImGui::Text(text.c_str());
 
-	ImGui::Text("size = %d x %d", logowidth, logoheight);
 	//ImGui::SetCursorPosX((windowSize.x - (logowidth / 1.3)) / 2);
 
 	ImVec2 imagesize = ImageKeepRatio(&logotex, 600,400);
@@ -54,6 +53,11 @@ void MainMenuUI::Render()
 	{
 		guimanager.SetLayout("lvleditor");
 	}
+	text = "Programming by Craymotherlol (Mehmet Eray Özüduru)";
+
+	textSize = ImGui::CalcTextSize(text.c_str());
+	ImGui::SetCursorPosX((windowSize.x - textSize.x) / 2);
+	ImGui::Text(text.c_str());
 
 	ImGui::End();
 };
