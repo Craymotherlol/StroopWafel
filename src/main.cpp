@@ -12,10 +12,16 @@ void framebuffer_size_callback(GLFWwindow *window, int width, int height)
 }
 
 std::vector<Vertex> verts = {
-    {{-0.5f,-0.5f, 0.0f}, {0.0f, 0.0f, 1.0f, 1.0f}},
-    {{ 0.5f,-0.5f, 0.0f}, {0.0f, 1.0f, 0.0f, 0.5f}},
-    {{ 0.5f, 0.5f, 0.0f}, {1.0f, 0.0f, 0.0f, 1.0f}},
-    {{-0.5f, 0.5f, 0.0f}, {1.0f, 0.0f, 0.0f, 0.2f}},
+    // Bottom Left 0
+    {{-0.3f,-0.5f, 0.0f}, {0.0f, 0.0f, 1.0f, 1.0f}, {0.0f,0.0f}},
+    // Bottom right 1
+    {{ 0.3f,-0.5f, 0.0f}, {0.0f, 1.0f, 0.0f, 0.5f}, {1.0f,0.0f}},
+
+    // Top right 2
+    {{ 0.3f, 0.5f, 0.0f}, {1.0f, 0.0f, 0.0f, 1.0f}, {1.0f,1.0f}},
+
+    // Top left 3
+    {{-0.3f, 0.5f, 0.0f}, {1.0f, 1.0f, 0.0f, 0.2f}, {0.0f,1.0f}},
 };
 
 std::vector<unsigned int> indis = {
@@ -55,6 +61,9 @@ int main(void)
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, 1);
 
+    GLfloat DeltaTime = 0.0f;
+    GLfloat lastFrame = 0.0f;
+
     int flags;
     glGetIntegerv(GL_CONTEXT_FLAGS, &flags);
 
@@ -67,6 +76,9 @@ int main(void)
     if (err != GLEW_OK)
         exit(1);
 
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
     guimanager.SetLayout("menu");
 
     if (flags & GL_CONTEXT_FLAG_DEBUG_BIT)
@@ -77,8 +89,12 @@ int main(void)
         //glDebugMessageControl(GL_DEBUG_SOURCE_API, GL_DONT_CARE, GL_DONT_CARE, 0, NULL, GL_TRUE);
     }
 
+
     Shader shader{"default.vert", "default.frag"};
-    Mesh mesh{verts, indis};
+    std::vector<Texture> tex = {
+        {SetTextureFromFile("res\\GFX\\testtex.png"), "texture_diffuse"}
+    };
+    Mesh mesh{verts, tex, indis};
 
     glfwSwapInterval(VSYNC);
 
@@ -102,10 +118,14 @@ int main(void)
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
     {
+        GLfloat currentFrame = glfwGetTime();
+        DeltaTime = currentFrame - lastFrame;
+        lastFrame = currentFrame;
         glfwPollEvents();
         glClearColor(0.03f, 0.2f, 0.05f, 1.0f);
         
         guimanager.Update();
+
 
         glClear(GL_COLOR_BUFFER_BIT);
 
@@ -114,16 +134,20 @@ int main(void)
         ImGui::NewFrame();
         // RENDER START
 
-        shader.Use();
-        glBindVertexArray(mesh.VAO);
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-
         guimanager.Render();
+
+        mesh.transform  = glm::rotate(mesh.transform, 2 * DeltaTime, glm::vec3(0.0f, 1.0f, 0.0f));
+
+        shader.Use();
+        shader.setMatrix4("transform", glm::value_ptr(mesh.transform));
+
+        mesh.Draw(shader);
         // RENDER END
         ImGui::Render();
 
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
         glfwSwapBuffers(window);
+        glGetError();
     }
 
     ImGui_ImplOpenGL3_Shutdown();

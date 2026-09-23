@@ -3,7 +3,7 @@
 #include <memory>
 
 void MainMenuUI::Begin() {
-	LoadTextureFromFile("E:\\Projects\\Code\\C++\\StroopWafel\\res\\GFX\\logo.png", &logotex, &logowidth, &logoheight);
+	LoadTextureFromFile("res\\GFX\\logo.png", &logotex, &logowidth, &logoheight);
 };
 
 void MainMenuUI::End() {
@@ -17,6 +17,7 @@ void MainMenuUI::Update(){
 
 void MainMenuUI::Render()
 {
+	glBindTexture(GL_TEXTURE_2D, logotex);
 	bool show = true;
 	int width, height;
 
@@ -44,6 +45,7 @@ void MainMenuUI::Render()
 	ImVec2 imagesize = ImageKeepRatio(&logotex, 600,400);
 
 	ImGui::SetCursorPosX((windowSize.x - imagesize.x) / 2);
+
 	ImGui::Image((ImTextureID)logotex, imagesize);
 
 	ImGui::SetCursorPosX((windowSize.x - 300) / 2);
@@ -60,4 +62,6 @@ void MainMenuUI::Render()
 	ImGui::Text(text.c_str());
 
 	ImGui::End();
+	glBindTexture(GL_TEXTURE_2D, 0);
+	
 };

@@ -2,4 +2,4 @@
 
 extern nfdresult_t RESULT_FILE_NFD;
 
-void ShowToolbar();
+void MenuBarUI();

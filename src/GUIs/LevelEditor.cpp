@@ -1,9 +1,9 @@
-#include "GUIs/Toolbar.h"
 #include "GUIs/LevelEditor.h"
-#include "GUIManager.h"
+#include "GUIs/Widgets/Toolbar.h"
 
 void LevelEditorUI::Begin() {
     leveleditor_built = false;
+   // CURRENT_TOOL = &modes;
 };
 
 void LevelEditorUI::End()
@@ -14,9 +14,7 @@ void LevelEditorUI::Update() {};
 
 void LevelEditorUI::Render()
 {
-
-    //ImGui::ShowStyleEditor();
-    ShowToolbar();
+    MenuBarUI();
     ImGuiID node_id = ImGui::GetID("Workspace");
     ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove;
     GLFWwindow *window = glfwGetCurrentContext();
@@ -65,6 +63,11 @@ void LevelEditorUI::Render()
 
         leveleditor_built = true;
     }
+   // std::cout << "BEFORE:" << CURRENT_TOOL << "\n";
+
+    ImGui::Begin("Toolbar", NULL, window_flags);
+    //ToolbarWidget(CURRENT_TOOL);
+    ImGui::End();
 
     ImGui::Begin("Layers", NULL, window_flags);
     ImGui::Text("WIP");

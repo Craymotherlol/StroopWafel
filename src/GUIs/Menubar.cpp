@@ -1,6 +1,6 @@
-#include "GUIs/Toolbar.h"
+#include "GUIs/Menubar.h"
 
-void ShowToolbar() {
+void MenuBarUI() {
     bool exit_modal = false;
 	
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
