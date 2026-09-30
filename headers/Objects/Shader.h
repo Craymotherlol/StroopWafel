@@ -14,6 +14,10 @@ public:
     const char *fragmentShaderCode;
     unsigned int ID;
 
+    ~Shader() {
+        glDeleteProgram(ID);
+    }
+
     Shader(const char *vertexPath, const char *fragmentPath)
     {
         std::string vertexCode;

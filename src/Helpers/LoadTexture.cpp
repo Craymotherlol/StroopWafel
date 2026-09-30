@@ -92,8 +92,9 @@ GLuint SetTextureFromFile(std::string file_name)
     stbi_set_flip_vertically_on_load(true);
     unsigned char *data = stbi_load(file_name.c_str(), &width, &height, &nrChannels, 0);
 
-    if (data)
+    if (data && glewInit)
     {
+        std::cout << "Generating data for: " << file_name << "\n";
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
         glGenerateMipmap(GL_TEXTURE_2D);
     }
@@ -105,6 +106,20 @@ GLuint SetTextureFromFile(std::string file_name)
     stbi_image_free(data);
 
     return texture;
+}
+
+void createFallbackTexture() {
+    glGenTextures(1, &FallbackTexture);
+    glBindTexture(GL_TEXTURE_2D, FallbackTexture);
+
+    std::vector<unsigned char> white = {255, 255, 255};
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+    glPixelStorei(GL_UNPACK_ROW_LENGTH, 0);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 1, 1, 0, GL_RGB, GL_UNSIGNED_BYTE, white.data());
+    glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 ImVec2 ImageKeepRatio(GLuint *imagedata, int width, int height)

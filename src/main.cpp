@@ -1,7 +1,18 @@
 #include "main.h"
-#include <iostream>
-#include <fstream>
-#include <vector>
+#include "Debug.h"
+
+GLfloat DeltaTime = 0.0f;
+GLuint FallbackTexture;
+ImFont* fontIcons = nullptr;
+
+GUIManager guimanager;
+SceneManager scenemanager;
+
+extern "C" 
+{
+  __declspec(dllexport) unsigned long NvOptimusEnablement = 0x00000001;
+  __declspec(dllexport) int AmdPowerXpressRequestHighPerformance = 1;
+}
 
 void framebuffer_size_callback(GLFWwindow *window, int width, int height)
 {
@@ -11,23 +22,6 @@ void framebuffer_size_callback(GLFWwindow *window, int width, int height)
     io.DisplaySize = ImVec2(width,height);
 }
 
-std::vector<Vertex> verts = {
-    // Bottom Left 0
-    {{-0.3f,-0.5f, 0.0f}, {0.0f, 0.0f, 1.0f, 1.0f}, {0.0f,0.0f}},
-    // Bottom right 1
-    {{ 0.3f,-0.5f, 0.0f}, {0.0f, 1.0f, 0.0f, 0.5f}, {1.0f,0.0f}},
-
-    // Top right 2
-    {{ 0.3f, 0.5f, 0.0f}, {1.0f, 0.0f, 0.0f, 1.0f}, {1.0f,1.0f}},
-
-    // Top left 3
-    {{-0.3f, 0.5f, 0.0f}, {1.0f, 1.0f, 0.0f, 0.2f}, {0.0f,1.0f}},
-};
-
-std::vector<unsigned int> indis = {
-    0, 1, 3,
-    1, 2, 3,
-};
 
 int main(void)
 {
@@ -35,12 +29,11 @@ int main(void)
     GLFWwindow *window;
     GLFWmonitor* monitor;
     WindowOptions options;
-    GUIManager guimanager;
 
     NFD::Init();
 
-    guimanager.AddLayout("menu", std::make_unique<MainMenuUI>(guimanager));
-    guimanager.AddLayout("lvleditor", std::make_unique<LevelEditorUI>());
+    guimanager.Add("menu", std::make_unique<MainMenuUI>());
+    guimanager.Add("lvleditor", std::make_unique<LevelEditorUI>());
 
     auto cfg = StroopConfig::GetConfig();
 
@@ -57,17 +50,17 @@ int main(void)
     monitor = glfwGetPrimaryMonitor();
     const GLFWvidmode* video = glfwGetVideoMode(monitor);
 
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-    glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, 1);
+    #if(DEBUG)
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+        glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, 1);
+    #else
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    #endif
 
-    GLfloat DeltaTime = 0.0f;
-    GLfloat lastFrame = 0.0f;
 
-    int flags;
-    glGetIntegerv(GL_CONTEXT_FLAGS, &flags);
-
-    window = glfwCreateWindow(static_cast<int>(options.WINDOWSIZE.x), static_cast<int>(options.WINDOWSIZE.y), options.WINDOWTITLE.c_str(), NULL, NULL);
+    window = glfwCreateWindow(static_cast<int>(options.WINDOWSIZE.x), static_cast<int>(options.WINDOWSIZE.y), options.WINDOWTITLE.c_str(), nullptr, nullptr);
     glfwSetWindowPos(window, static_cast<int>((video->width - options.WINDOWSIZE.x) / 2),static_cast<int>((video->height - options.WINDOWSIZE.y) / 2));
 
     glfwMakeContextCurrent(window);
@@ -76,78 +69,93 @@ int main(void)
     if (err != GLEW_OK)
         exit(1);
 
+    createFallbackTexture();
+
+    scenemanager.Add("menu", std::make_unique<MainMenuScene>());
+    scenemanager.Add("scenerenderer", std::make_unique<sceneFrameRenderer>());
+
+    #if(DEBUG)
+        int flags;
+        glGetIntegerv(GL_CONTEXT_FLAGS, &flags);
+        
+        if (flags & GL_CONTEXT_FLAG_DEBUG_BIT)
+        {
+            glEnable(GL_DEBUG_OUTPUT);
+            glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
+            glDebugMessageCallback(glDebugOutput, 0);
+            glDebugMessageControl(GL_DEBUG_SOURCE_API, GL_DONT_CARE, GL_DONT_CARE, 0, NULL, GL_TRUE);
+        }
+    #endif
+
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-    guimanager.SetLayout("menu");
-
-    if (flags & GL_CONTEXT_FLAG_DEBUG_BIT)
-    {
-        glEnable(GL_DEBUG_OUTPUT);
-        glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
-        glDebugMessageCallback(glDebugOutput, 0);
-        //glDebugMessageControl(GL_DEBUG_SOURCE_API, GL_DONT_CARE, GL_DONT_CARE, 0, NULL, GL_TRUE);
-    }
-
-
-    Shader shader{"default.vert", "default.frag"};
-    std::vector<Texture> tex = {
-        {SetTextureFromFile("res\\GFX\\testtex.png"), "texture_diffuse"}
-    };
-    Mesh mesh{verts, tex, indis};
-
-    glfwSwapInterval(VSYNC);
-
+    
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
     ImGuiIO &io = ImGui::GetIO();
+
     io.IniFilename = nullptr;
     io.LogFilename = nullptr;
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
-    io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+    io.ConfigFlags |= ImGuiConfigFlags_DockingEnable; 
 
     ImGuiStyle &style = ImGui::GetStyle();
     StroopConfig::SetImGuiStyle(style);
 
     ImGui_ImplGlfw_InitForOpenGL(window, true);
     ImGui_ImplOpenGL3_Init();
+    
+    io.Fonts->AddFontDefaultVector();
+    fontIcons = io.Fonts->AddFontFromFileTTF("res/fonts/ftawesome-solid.otf", 13.0f);
+
+    ImFontConfig config;
+    config.MergeMode = true;
+    config.PixelSnapH = true;
+
+    static const ImWchar icon_ranges[] = { ICON_MIN_FA, ICON_MAX_FA, 0 };
+
+    io.Fonts->AddFontFromFileTTF("res/fonts/ftawesome-solid.otf", 13.0f, &config, icon_ranges);
+    io.Fonts->Build();
+
+
+    scenemanager.Set("menu");
+    guimanager.Set("menu");
 
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
     glfwSetKeyCallback(window, KeyboardCallback);
+    glfwSwapInterval(1);
+
+    double lastFrame = 0.0f;
 
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
     {
-        GLfloat currentFrame = glfwGetTime();
+        double currentFrame = glfwGetTime();
         DeltaTime = currentFrame - lastFrame;
         lastFrame = currentFrame;
-        glfwPollEvents();
-        glClearColor(0.03f, 0.2f, 0.05f, 1.0f);
-        
+
         guimanager.Update();
+        scenemanager.Update();
 
-
+        glClearColor(0.03f, 0.2f, 0.05f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
-        // RENDER START
+        // RENDER START vv
 
         guimanager.Render();
+        scenemanager.Render();
 
-        mesh.transform  = glm::rotate(mesh.transform, 2 * DeltaTime, glm::vec3(0.0f, 1.0f, 0.0f));
-
-        shader.Use();
-        shader.setMatrix4("transform", glm::value_ptr(mesh.transform));
-
-        mesh.Draw(shader);
-        // RENDER END
+        
         ImGui::Render();
+        // RENDER END ^^
 
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+        
         glfwSwapBuffers(window);
-        glGetError();
+        glfwPollEvents();
     }
 
     ImGui_ImplOpenGL3_Shutdown();

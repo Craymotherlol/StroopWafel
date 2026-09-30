@@ -1,19 +1,18 @@
 #ifndef STROOP_GUI_LEVELEDITOR_H
 #define STROOP_GUI_LEVELEDITOR_H
 
-#include "GUIs/Menubar.h"
-#include "../GUIManager.h"
-#include "GUIs/Widgets/Toolbar.h"
+#include "../Managers.h"
+#include "Globals.h"
 
-class LevelEditorUI : public GUILayout
+class LevelEditorUI : public Scene
 {
 private:
     bool leveleditor_built;
     GLFWwindow *window;
-    //ToolModes modes;
 
 public:
-   // ToolModes *CURRENT_TOOL;
+    // prevent garbage value blaaah
+    ToolModes CURRENT_TOOL = ToolModes::SELECT;
 
     LevelEditorUI() {};
 

@@ -1,5 +1,5 @@
 #include "GUIs/MainMenu.h"
-#include "GUIManager.h"
+#include "Managers.h"
 #include <memory>
 
 void MainMenuUI::Begin() {
@@ -7,8 +7,9 @@ void MainMenuUI::Begin() {
 };
 
 void MainMenuUI::End() {
-	glBindTexture(GL_TEXTURE_2D, 0);
 	glDeleteTextures(1, &logotex);
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, 0);
 };
 
 void MainMenuUI::Update(){
@@ -17,7 +18,6 @@ void MainMenuUI::Update(){
 
 void MainMenuUI::Render()
 {
-	glBindTexture(GL_TEXTURE_2D, logotex);
 	bool show = true;
 	int width, height;
 
@@ -42,6 +42,8 @@ void MainMenuUI::Render()
 
 	//ImGui::SetCursorPosX((windowSize.x - (logowidth / 1.3)) / 2);
 
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, logotex);
 	ImVec2 imagesize = ImageKeepRatio(&logotex, 600,400);
 
 	ImGui::SetCursorPosX((windowSize.x - imagesize.x) / 2);
@@ -53,7 +55,8 @@ void MainMenuUI::Render()
 
 	if (ImGui::Button(text.c_str(), ImVec2(300, 50)))
 	{
-		guimanager.SetLayout("lvleditor");
+		guimanager.Set("lvleditor");
+		scenemanager.Set("scenerenderer");
 	}
 	text = "Programming by Craymotherlol (Mehmet Eray Özüduru)";
 
@@ -62,6 +65,4 @@ void MainMenuUI::Render()
 	ImGui::Text(text.c_str());
 
 	ImGui::End();
-	glBindTexture(GL_TEXTURE_2D, 0);
-	
 };

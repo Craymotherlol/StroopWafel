@@ -1,5 +1,6 @@
 #include "lib/stb_image.h"
 #include "Window.h"
+#include "Globals.h"
 #include <fstream>
 #include <filesystem>
 
@@ -10,3 +11,5 @@ bool LoadTextureFromFile(const char *file_name, GLuint *out_texture, int *out_wi
 GLuint SetTextureFromFile(std::string file_name);
 
 ImVec2 ImageKeepRatio(GLuint* imagedata, int width, int height);
+
+void createFallbackTexture();

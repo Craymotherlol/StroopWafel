@@ -1,5 +1,4 @@
-out/*
-.vscode/*
+out
+.vscode
 bin/*
 CMakePresets.json
-build/*

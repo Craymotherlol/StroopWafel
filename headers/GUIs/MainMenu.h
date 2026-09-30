@@ -1,17 +1,15 @@
-#include "../GUIManager.h"
+#include "../Managers.h"
 #include "Helpers/LoadTexture.h"
 
 // If you read this message this language really sucks, hate it. - Cray
 
-class MainMenuUI : public GUILayout
+class MainMenuUI : public Scene
 {
 private:
     int logowidth, logoheight;
     unsigned int logotex;
-    
-    GUIManager& guimanager;
 public:
-    MainMenuUI(GUIManager& guimgr) : guimanager(guimgr) {};
+    MainMenuUI() {};
 
     void Begin() override;
     void End() override;

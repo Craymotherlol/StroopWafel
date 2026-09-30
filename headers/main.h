@@ -2,32 +2,16 @@
 #define STROOP_MAIN_H
 
 #include "Window.h"
-#include "Debug.h"
-#include "Objects.h"
 #include "Init.h"
 #include "Shortcuts.h"
+#include "Managers.h"
 
-// ImGui
-#include <GUIManager.h>
+// GUIs
 #include <GUIs/MainMenu.h>
 #include <GUIs/LevelEditor.h>
 
-// OpenGL stuff
-#include "Objects/Mesh.h"
-#include "Objects/Shader.h"
-#include "Helpers/LoadTexture.h"
-
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
-
-
-// Standard crap
-#include <string>
-#include <toml++/toml.hpp>
-#include <iostream>
-#include <fstream>
-#include <vector>
-
+// Scenes
+#include <Scenes/MainMenu.h>
+#include <Scenes/SceneRenderer.h>
 
 #endif

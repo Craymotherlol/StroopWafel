@@ -2,6 +2,8 @@
 #define STROOP_WINDOW_H
 
 #include <iostream>
+#include <string>
+
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <imgui.h>
@@ -10,9 +12,8 @@
 #include <imgui_impl_glfw.h>
 #include <nfd.hpp>
 #include <nfd_glfw3.h>
-#include <string>
-//#include "SceneManager.h"
-#include "GUIManager.h"
+
+#include "Managers.h"
 
 class WindowOptions {
 public:

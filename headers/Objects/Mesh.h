@@ -25,8 +25,7 @@ public:
     std::vector<Vertex> vertices;
     std::vector<unsigned int> indices;
     std::vector<Texture> textures;
-    glm::mat4 transform = glm::mat4(1.0f);
-    
+
     unsigned int VAO;
 
     ~Mesh()
@@ -34,8 +33,9 @@ public:
         glDeleteVertexArrays(1, &VAO);
         glDeleteBuffers(1, &VBO);
         glDeleteBuffers(1, &EBO);
+
         for (unsigned int i = 0; i < textures.size(); i++)
-        { 
+        {
             glDeleteTextures(1, &textures[i].id);
         }
     };
@@ -43,7 +43,8 @@ public:
     Mesh(const std::vector<Vertex> _verts, const std::vector<Texture> _texs, std::vector<unsigned int> _indis = {})
     {
         this->vertices = _verts;
-        if (!_indis.empty()) {
+        if (!_indis.empty())
+        {
             this->indices = _indis;
         }
         this->textures = _texs;
@@ -51,42 +52,12 @@ public:
         SetupData();
     };
 
-    void Draw(Shader &shader)
-    {
-        unsigned int diffuseNr = 1;
-        unsigned int specularNr = 1;
-        for (unsigned int i = 0; i < textures.size(); i++)
-        {
-            glActiveTexture(GL_TEXTURE0 + i);
-            std::string number;
-            std::string name = textures[i].type;
-            if (name == "texture_diffuse") {
-                number = std::to_string(diffuseNr++);
-            } else if (name == "texture_specular") {
-                number = std::to_string(specularNr++);
-            }
-
-            glUniform1i(glGetUniformLocation(shader.ID, (name + number).c_str()), i);
-
-            glBindTexture(GL_TEXTURE_2D, textures[i].id);
-        }
-
-        glBindVertexArray(VAO);
-        if (!indices.empty()) {
-            glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
-        } else {
-            glDrawArrays(GL_TRIANGLES, 0, vertices.size());
-        }
-
-        glActiveTexture(GL_TEXTURE0);   
-        glBindVertexArray(0);
-    }
-
 private:
     unsigned int VBO, EBO;
 
     void SetupData()
     {
+        std::cout << "Generating Data:" << &VAO << "\n";
         glGenVertexArrays(1, &VAO);
         glGenBuffers(1, &VBO);
         glGenBuffers(1, &EBO);
@@ -114,7 +85,8 @@ private:
         glBindBuffer(GL_ARRAY_BUFFER, 0);
 
         glBindVertexArray(0);
+
+        std::cout << "Done generating:" << &VAO << "\n";
     }
-    
 };
 #endif

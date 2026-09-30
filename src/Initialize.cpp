@@ -2,6 +2,10 @@
 #include <iostream>
 #include <filesystem>
 
+const std::string RESOURCES_PATH = "res/";
+const std::string SHADERS_PATH = RESOURCES_PATH + "/shaders";
+const std::string FONTS_PATH = RESOURCES_PATH + "/fonts";
+
 bool configExists(const std::string& filename) {
     return std::filesystem::exists(filename);
 }

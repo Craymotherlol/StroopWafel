@@ -1,16 +1,18 @@
 #include "GUIs/LevelEditor.h"
 #include "GUIs/Widgets/Toolbar.h"
+#include "GUIs/Menubar.h"
 
-void LevelEditorUI::Begin() {
-    leveleditor_built = false;
-   // CURRENT_TOOL = &modes;
-};
-
-void LevelEditorUI::End()
+void LevelEditorUI::Begin()
 {
+    leveleditor_built = false;
+    // CURRENT_TOOL = &modes;
 };
 
-void LevelEditorUI::Update() {};
+void LevelEditorUI::End() {
+};
+
+void LevelEditorUI::Update() {
+};
 
 void LevelEditorUI::Render()
 {
@@ -31,7 +33,7 @@ void LevelEditorUI::Render()
 
     ImGui::Begin("Workspace", NULL, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus | ImGuiWindowFlags_NoBackground);
 
-    ImGui::DockSpace(node_id, ImVec2(0,0), ImGuiDockNodeFlags_NoUndocking | ImGuiDockNodeFlags_AutoHideTabBar | ImGuiDockNodeFlags_PassthruCentralNode);
+    ImGui::DockSpace(node_id, ImVec2(0, 0), ImGuiDockNodeFlags_NoUndocking | ImGuiDockNodeFlags_AutoHideTabBar | ImGuiDockNodeFlags_PassthruCentralNode);
     ImGui::End();
 
     if (!leveleditor_built)
@@ -40,7 +42,7 @@ void LevelEditorUI::Render()
         ImGui::DockBuilderAddNode(node_id);
 
         ImGuiID dock1 = ImGui::DockBuilderSplitNode(node_id, ImGuiDir_Left, 0.1f, NULL, &node_id);
-        
+
         ImGuiID dock2 = ImGui::DockBuilderSplitNode(node_id, ImGuiDir_Right, 0.25f, NULL, &node_id);
         ImGui::DockBuilderGetNode(dock2)->LocalFlags = ImGuiDockNodeFlags_NoCloseButton | ImGuiDockNodeFlags_NoUndocking | ImGuiDockNodeFlags_NoTabBar;
 
@@ -50,24 +52,21 @@ void LevelEditorUI::Render()
 
         ImGuiID dock5 = ImGui::DockBuilderSplitNode(dock4, ImGuiDir_Left, 0.1f, NULL, &dock4);
 
-        //ImGuiID dock6 = ImGui::DockBuilderSplitNode(dock1, ImGuiDir_Up, 0.07f, NULL, &dock1);
+        // ImGuiID dock6 = ImGui::DockBuilderSplitNode(dock1, ImGuiDir_Up, 0.07f, NULL, &dock1);
 
         ImGui::DockBuilderDockWindow("Layers", dock1);
         ImGui::DockBuilderDockWindow("Viewport", dock2);
         ImGui::DockBuilderDockWindow("Properties", dock3);
         ImGui::DockBuilderDockWindow("Assets", dock4);
         ImGui::DockBuilderDockWindow("Selections", dock5);
-        //ImGui::DockBuilderDockWindow("Toolbar", dock6);
+        // ImGui::DockBuilderDockWindow("Toolbar", dock6);
 
         ImGui::DockBuilderFinish(node_id);
 
         leveleditor_built = true;
     }
-   // std::cout << "BEFORE:" << CURRENT_TOOL << "\n";
+    // std::cout << "BEFORE:" << CURRENT_TOOL << "\n";
 
-    ImGui::Begin("Toolbar", NULL, window_flags);
-    //ToolbarWidget(CURRENT_TOOL);
-    ImGui::End();
 
     ImGui::Begin("Layers", NULL, window_flags);
     ImGui::Text("WIP");
@@ -75,13 +74,13 @@ void LevelEditorUI::Render()
 
     ImGui::Begin("Assets");
 
-    //if (ImGui::BeginTabBar("Assets"))
+    // if (ImGui::BeginTabBar("Assets"))
     //{
-    //    if (ImGui::BeginTabItem("Objects"))
-    //    {
-    //        ImGui::Text("WIP");
-    //        ImGui::EndTabItem();
-    //    }
+    //     if (ImGui::BeginTabItem("Objects"))
+    //     {
+    //         ImGui::Text("WIP");
+    //         ImGui::EndTabItem();
+    //     }
 
     //    if (ImGui::BeginTabItem("Enemies"))
     //    {
@@ -92,14 +91,20 @@ void LevelEditorUI::Render()
     //}
     ImGui::End();
 
-    ImGui::Begin("Viewport",  NULL, ImGuiWindowFlags_NoDecoration);
+    ImGui::Begin("Viewport", NULL, ImGuiWindowFlags_NoDecoration);
+    ImVec2 viewportregion = ImGui::GetCursorScreenPos();
     ImGui::End();
 
-    ImGui::Begin("Selections", NULL, window_flags);
+    ImGui::SetNextWindowPos(ImVec2(viewportregion.x+5.0f, viewportregion.y+5.0f), 0 , ImVec2(0,0));
+    ImGui::Begin("Toolbar", NULL, ImGuiWindowFlags_NoBackground | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoTitleBar);
+    ToolbarWidget(CURRENT_TOOL);
+    ImGui::End();
+
+    ImGui::Begin("Selections", NULL, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoTitleBar);
     ImGui::End();
 
     ImGui::Begin("Properties", NULL, window_flags);
-    ImGui::TextColored(ImVec4(0,255,255,255), "WIP");
+    ImGui::TextColored(ImVec4(0, 255, 255, 255), "WIP");
     ImGui::End();
 
     ImGui::PopStyleVar(3);

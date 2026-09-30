@@ -1,27 +1,46 @@
 #include "GUIs/Widgets/Toolbar.h"
 
-void ToolbarWidget(ToolModes* curtool) {
-    ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoBackground | 
-    ImGuiWindowFlags_NoResize | 
-    ImGuiWindowFlags_NoMove | 
-    ImGuiWindowFlags_NoScrollbar | 
-    ImGuiWindowFlags_NoTitleBar;
+void ToolbarWidget(ToolModes &curtool)
+{
+     ImGuiStyle &style = ImGui::GetStyle();
+     ImGuiIO &io = ImGui::GetIO();
 
-    std::cout << "AFTER:" << curtool << "\n";
+     std::vector<std::string> buttonlabels = {
+          ICON_FA_ARROW_POINTER, // SELECT
+          ICON_FA_BROOM, // DRAW
+          ICON_FA_ERASER // ERASE
+     };
 
-    if (ImGui::Button("Select", ImVec2(40.0f,40.0f))) {
-        //*curtool = SELECT;
-    };
+     for (int i = 0; i < buttonlabels.size(); i++) {
+          bool selected = (curtool == static_cast<ToolModes>(i));
 
-    ImGui::SameLine();
+          if (selected) {
+               ImGui::PushStyleColor(ImGuiCol_Button, style.Colors[ImGuiCol_ButtonHovered]);
+          }
 
-    if (ImGui::Button("Brush", ImVec2(40.0f,40.0f))) {
-        //*curtool = DRAW;
-    };
+          ImGui::PushFont(fontIcons, 20.0f);
+          ImGui::PushStyleVar(ImGuiStyleVar_ButtonTextAlign, ImVec2(0.7f, 0.5f));
+          if (ImGui::Button(buttonlabels[i].c_str(), ImVec2(30.0f, 30.0f))) {
+               curtool = static_cast<ToolModes>(i);
 
-    ImGui::SameLine();
+               switch (curtool) {
+                    case ToolModes::SELECT:
+                    break;
+                    case ToolModes::DRAW:
+                    break;
+                    case ToolModes::ERASE:
+                    break;
+               }
+          }
+          ImGui::PopStyleVar();
+          ImGui::PopFont();
 
-    if (ImGui::Button("Erase", ImVec2(40.0f,40.0f))) {
-        //*curtool = ERASE;
-    };
+          if (selected) {
+               ImGui::PopStyleColor();
+          }
+
+          if (i < buttonlabels.size()) {
+               ImGui::SameLine();
+          }  
+     }
 };
