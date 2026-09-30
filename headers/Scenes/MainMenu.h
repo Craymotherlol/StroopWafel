@@ -2,7 +2,7 @@
 #define STROOPWA_SCENE_MAINMENU_H
 
 #include "window.h"
-#include "Objects/WafelObject.h"
+#include "Objects/Wafel.h"
 
 class MainMenuScene : public Scene
 {

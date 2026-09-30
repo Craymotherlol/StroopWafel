@@ -2,14 +2,16 @@
 #define STROOPWA_SCENE_RENDERER_H
 
 #include "window.h"
-#include "Objects/WafelObject.h"
+#include "Objects/Wafel.h"
 
 class sceneFrameRenderer : public Scene
 {
 private:
-    GLuint frameBuffer, textureColorBuffer, screenVAO, screenVBO;
+    GLuint screenVAO, screenVBO;
 
 public:
+    static WafelFrame Renderer;
+    
     sceneFrameRenderer() {};
 
     void Begin() override;
