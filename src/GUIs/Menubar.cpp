@@ -5,13 +5,14 @@ void MenuBarUI() {
 	
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
 	ImGui::BeginMainMenuBar();
+	//ImGui::PushFont(fontIcons);
 	if (ImGui::BeginMenu("File")) {
-		
-		if (ImGui::MenuItem("New Level File..")) {
+
+		if (ImGui::MenuItem(ICON_FA_FILE " New Level File..")) {
 			exit_modal = true;
 		}
 		
-		if (ImGui::MenuItem("Open Level File..")) {
+		if (ImGui::MenuItem(ICON_FA_FOLDER_OPEN " Open Level File..")) {
 			nfdu8char_t *outPath;
 			nfdopendialogu8args_t args = {0};
 			nfdu8filteritem_t filters[2] = { { "Wafel Resource Data", "wrd" }, { "CettaLyke Level Layout", "cll" } };
@@ -21,24 +22,23 @@ void MenuBarUI() {
 			nfdresult_t RESULT_FILE_NFD = NFD_OpenDialogU8_With(&outPath, &args);
 		}
 		
-		if (ImGui::MenuItem("Save")) {
+		if (ImGui::MenuItem(ICON_FA_FLOPPY_DISK " Save", "Ctrl+S")) {
 			exit_modal = true;
 		}
 		
-		if (ImGui::MenuItem("Save to..")) {
+		if (ImGui::MenuItem("Save to..", "Ctrl+Alt+S")) {
 			exit_modal = true;
 		}
 		
 		if (ImGui::MenuItem("Exit")) {
 			exit_modal = true;
 		}
-			
 		ImGui::EndMenu();
 	}
 	
-	if (ImGui::BeginMenu("Run")) {
+	if (ImGui::BeginMenu("Play")) {
 		
-		if (ImGui::MenuItem("Playtest")) {
+		if (ImGui::MenuItem(ICON_FA_PLAY " Run", "F5")) {
 			exit_modal = true;
 		}
 		
@@ -49,12 +49,13 @@ void MenuBarUI() {
 	if (ImGui::BeginMenu("View")) {
 		
 		if (ImGui::MenuItem("Style Editor")) {
+			ImGui::ShowStyleEditor();
 		}
 		
-			
 		ImGui::EndMenu();
 	}
-	
+
+	//ImGui::PopFont();
 	ImGui::EndMainMenuBar();
 	ImGui::PopStyleVar();
 };

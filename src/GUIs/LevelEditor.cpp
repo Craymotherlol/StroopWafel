@@ -12,12 +12,11 @@ void LevelEditorUI::Begin()
 void LevelEditorUI::End() {
 };
 
-void LevelEditorUI::Update() {
+void LevelEditorUI::Update() { 
 };
 
 void LevelEditorUI::Render()
 {
-    ImGui::ShowStyleEditor();
     MenuBarUI();
     ImGuiID node_id = ImGui::GetID("Workspace");
     ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove;

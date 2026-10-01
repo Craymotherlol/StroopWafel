@@ -105,25 +105,27 @@ int main(void)
     ImGui_ImplGlfw_InitForOpenGL(window, true);
     ImGui_ImplOpenGL3_Init();
     
-    io.Fonts->AddFontDefaultVector();
-    fontIcons = io.Fonts->AddFontFromFileTTF("res/fonts/ftawesome-solid.otf", 13.0f);
+    //io.Fonts->AddFontFromFileTTF("res/fonts/fa-solid-900.ttf", 13.0f);
 
-    ImFontConfig config;
-    config.MergeMode = true;
-    config.PixelSnapH = true;
+    ImFontConfig font_config;
+    font_config.SizePixels = 13.0f;
 
-    static const ImWchar icon_ranges[] = { ICON_MIN_FA, ICON_MAX_FA, 0 };
+    io.Fonts->AddFontDefaultVector(&font_config);
+    ImFontConfig icons_config;
+    icons_config.MergeMode = true;
+    icons_config.PixelSnapH = true;
 
-    io.Fonts->AddFontFromFileTTF("res/fonts/ftawesome-solid.otf", 13.0f, &config, icon_ranges);
-    io.Fonts->Build();
 
+    icons_config.GlyphOffset.y = 1.5f; 
+    static const ImWchar icon_ranges[] = {ICON_MIN_FA, ICON_MAX_FA, 0};
+    io.Fonts->AddFontFromFileTTF("res/fonts/fa-solid-900.ttf", 13.0f, &icons_config, icon_ranges);
 
     scenemanager.Set("menu");
     guimanager.Set("menu");
 
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
     glfwSetKeyCallback(window, KeyboardCallback);
-    glfwSwapInterval(1);
+    glfwSwapInterval(VSYNC);
 
     double lastFrame = 0.0f;
 

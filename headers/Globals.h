@@ -2,7 +2,7 @@
 #define STROOP_GLOBALS_H
 
 #include "window.h"
-#include "IconsFontAwesome7.h"
+#include "lib/IconsFontAwesome7.h"
 
 
 enum class ToolModes : int
