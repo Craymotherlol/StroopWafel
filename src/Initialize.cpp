@@ -1,10 +1,19 @@
 #include "Init.h"
 #include <iostream>
 #include <filesystem>
+#include "StroopConfig.h"
 
 const std::string RESOURCES_PATH = "res/";
 const std::string SHADERS_PATH = RESOURCES_PATH + "/shaders";
 const std::string FONTS_PATH = RESOURCES_PATH + "/fonts";
+
+// Default parameters
+ImVec2 WindowOptions::windowSize = ImVec2(1440,900);
+
+std::string programName = "StroopWafel ";
+std::string WindowOptions::windowTitle = programName + STROOPWAFEL_VERSION;
+
+int WindowOptions::vSync = 1;
 
 bool configExists(const std::string& filename) {
     return std::filesystem::exists(filename);
@@ -21,13 +30,14 @@ void StroopConfig::Setup()
     std::fstream fs;
 
     constexpr auto source = R"(
-        WIDTH = 1336
-        HEIGHT = 768
+        WIDTH = 1440
+        HEIGHT = 900
         VSYNC = 1
     )";
 
     toml::table tbl = toml::parse(source);
 
+	// bllah blah
     if (configExists("config.toml"))
     {
 		toml::parse_result cfg;
@@ -70,6 +80,19 @@ void StroopConfig::Setup()
     fs.open("config.toml", std::ios::in | std::ios::out);
     fs << cfg << "\n\n";
     fs.close();
+
+	StroopConfig s;
+
+	s.SetVariables();
+}
+
+void StroopConfig::SetVariables() noexcept
+ {
+	auto cfg = GetConfig();
+
+	// I love 3:2 :))
+	WindowOptions::windowSize = ImVec2(cfg["WINDOW"]["WIDTH"].value_or<float>(1440), cfg["WINDOW"]["HEIGHT"].value_or<float>(900));
+	WindowOptions::vSync = cfg["WINDOW"]["VSYNC"].value_or<int>(1);
 }
 
 void StroopConfig::SetImGuiStyle(ImGuiStyle &style) noexcept

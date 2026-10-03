@@ -3,6 +3,7 @@
 
 #include "Shader.h"
 #include "Mesh.h"
+#include "Globals.h"
 #include "../Helpers/LoadTexture.h"
 #include "../window.h"
 
@@ -12,35 +13,42 @@
 class WafelFrame
 {
 private:
-    unsigned int RBO;
 public:
-    unsigned int FBO, TEXTURE;
+    unsigned int FBO, TEXTURE, RBO;
 
+    ~WafelFrame() {
+        glDeleteRenderbuffers(1, &RBO);
+        glDeleteTextures(1, &TEXTURE);
+        glDeleteFramebuffers(1, &FBO);
+    }
     void createFrameBuffer()
     {
+        //Frame Buffer
         glGenFramebuffers(1, &FBO);
         glBindFramebuffer(GL_FRAMEBUFFER, FBO);
 
+        // Texture
         glGenTextures(1, &TEXTURE);
         glBindTexture(GL_TEXTURE_2D, TEXTURE);
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 640, 360, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, WindowOptions::windowSize.x, WindowOptions::windowSize.y, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
         glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, TEXTURE, 0);
 
+        //Render buffer
         glGenRenderbuffers(1, &RBO);
         glBindRenderbuffer(GL_RENDERBUFFER, RBO);
-        glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, 640, 360);
+        glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, WindowOptions::windowSize.x, WindowOptions::windowSize.y);
         glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, RBO);
-
-        glBindFramebuffer(GL_FRAMEBUFFER, 0);
-        glBindTexture(GL_TEXTURE_2D, 0);
-        glBindRenderbuffer(GL_RENDERBUFFER, 0);
 
         if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
             std::cout << "ERROR::FRAMEBUFFER:: Framebuffer is not complete!" << std::endl;
         }
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
+        glBindTexture(GL_TEXTURE_2D, 0);
+        glBindRenderbuffer(GL_RENDERBUFFER, 0);
+
+        //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     }
 
     void rescaleFrameBuffer(float WIDTH, float HEIGHT)

@@ -8,11 +8,11 @@ void MenuBarUI() {
 	//ImGui::PushFont(fontIcons);
 	if (ImGui::BeginMenu("File")) {
 
-		if (ImGui::MenuItem(ICON_FA_FILE " New Level File..")) {
+		if (ImGui::MenuItem(ICON_FA_FILE " New Level File..", "Ctrl+N")) {
 			exit_modal = true;
 		}
 		
-		if (ImGui::MenuItem(ICON_FA_FOLDER_OPEN " Open Level File..")) {
+		if (ImGui::MenuItem(ICON_FA_FOLDER_OPEN " Open Level File..", R"(Ctrl+O)")) {
 			nfdu8char_t *outPath;
 			nfdopendialogu8args_t args = {0};
 			nfdu8filteritem_t filters[2] = { { "Wafel Resource Data", "wrd" }, { "CettaLyke Level Layout", "cll" } };
@@ -30,7 +30,7 @@ void MenuBarUI() {
 			exit_modal = true;
 		}
 		
-		if (ImGui::MenuItem("Exit")) {
+		if (ImGui::MenuItem("Exit", "Alt+F4")) {
 			exit_modal = true;
 		}
 		ImGui::EndMenu();

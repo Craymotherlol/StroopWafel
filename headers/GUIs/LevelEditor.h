@@ -11,6 +11,9 @@ private:
     GLFWwindow *window;
 
 public:
+    static ImVec2 viewportSize;
+    static ImVec2 viewportPos;
+
     // prevent garbage value blaaah
     ToolModes CURRENT_TOOL = ToolModes::SELECT;
 

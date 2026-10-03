@@ -1,9 +1,11 @@
 #include "main.h"
 #include "Debug.h"
+#include <StroopConfig.h>
+
 
 GLfloat DeltaTime = 0.0f;
 GLuint FallbackTexture;
-ImFont* fontIcons = nullptr;
+//ImVec2 WindowOptions::windowSize;
 
 GUIManager guimanager;
 SceneManager scenemanager;
@@ -17,14 +19,16 @@ extern "C"
 void framebuffer_size_callback(GLFWwindow *window, int width, int height)
 {
     glViewport(0, 0, width, height);
-    ImGuiIO& io = ImGui::GetIO();
-    io.DisplayFramebufferScale = ImVec2(1.0f,1.0f);
-    io.DisplaySize = ImVec2(width,height);
+
+    if (scenemanager.id == "scenerenderer") {
+        sceneFrameRenderer::Renderer.rescaleFrameBuffer(width, height);
+    }
 }
 
 
-int main(void)
+int main()
 {
+    std::cout << "Running StroopWafel v" << STROOPWAFEL_VERSION << "\n";
     StroopConfig::Setup();
     GLFWwindow *window;
     GLFWmonitor* monitor;
@@ -35,16 +39,6 @@ int main(void)
     guimanager.Add("menu", std::make_unique<MainMenuUI>());
     guimanager.Add("lvleditor", std::make_unique<LevelEditorUI>());
 
-    auto cfg = StroopConfig::GetConfig();
-
-    float WINDOW_WIDTH = cfg["WINDOW"]["WIDTH"].value_or<float>(1336);
-    float WINDOW_HEIGHT = cfg["WINDOW"]["HEIGHT"].value_or<float>(768);
-    int VSYNC = cfg["WINDOW"]["VSYNC"].value_or<int>(1);
-
-    options.WINDOWSIZE = {WINDOW_WIDTH, WINDOW_HEIGHT};
-    options.WINDOWTITLE = "StroopWafel";
-
-    
     if (!glfwInit()) return -1;
 
     monitor = glfwGetPrimaryMonitor();
@@ -60,14 +54,17 @@ int main(void)
     #endif
 
 
-    window = glfwCreateWindow(static_cast<int>(options.WINDOWSIZE.x), static_cast<int>(options.WINDOWSIZE.y), options.WINDOWTITLE.c_str(), nullptr, nullptr);
-    glfwSetWindowPos(window, static_cast<int>((video->width - options.WINDOWSIZE.x) / 2),static_cast<int>((video->height - options.WINDOWSIZE.y) / 2));
+    window = glfwCreateWindow(WindowOptions::windowSize.x, WindowOptions::windowSize.y, WindowOptions::windowTitle.c_str(), nullptr, nullptr);
+    glfwSetWindowPos(window, (video->width - WindowOptions::windowSize.x) / 2,(video->height - WindowOptions::windowSize.y) / 2);
+    glfwSetWindowSizeLimits(window, 904, 565, GLFW_DONT_CARE, GLFW_DONT_CARE);
 
     glfwMakeContextCurrent(window);
 
     GLenum err = glewInit();
     if (err != GLEW_OK)
         exit(1);
+
+    glEnable(GL_DEPTH_TEST);
 
     createFallbackTexture();
 
@@ -87,8 +84,8 @@ int main(void)
         }
     #endif
 
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    //glEnable(GL_BLEND);
+    //glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
@@ -115,7 +112,6 @@ int main(void)
     icons_config.MergeMode = true;
     icons_config.PixelSnapH = true;
 
-
     icons_config.GlyphOffset.y = 1.5f; 
     static const ImWchar icon_ranges[] = {ICON_MIN_FA, ICON_MAX_FA, 0};
     io.Fonts->AddFontFromFileTTF("res/fonts/fa-solid-900.ttf", 13.0f, &icons_config, icon_ranges);
@@ -125,7 +121,7 @@ int main(void)
 
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
     glfwSetKeyCallback(window, KeyboardCallback);
-    glfwSwapInterval(VSYNC);
+    glfwSwapInterval(WindowOptions::vSync);
 
     double lastFrame = 0.0f;
 
@@ -139,19 +135,18 @@ int main(void)
         guimanager.Update();
         scenemanager.Update();
 
-        glClearColor(0.03f, 0.2f, 0.05f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
-
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
         // RENDER START vv
 
-        guimanager.Render();
         scenemanager.Render();
-
-        
+        guimanager.Render();
+    
         ImGui::Render();
+
+        glClearColor(0.03f, 0.2f, 0.05f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT);
         // RENDER END ^^
 
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());

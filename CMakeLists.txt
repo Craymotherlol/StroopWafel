@@ -1,5 +1,6 @@
 cmake_minimum_required(VERSION 3.10)
-project(StroopWafel VERSION 0.1 LANGUAGES C CXX)
+project(STROOPWAFEL LANGUAGES C CXX)
+
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -27,17 +28,35 @@ FetchContent_Declare(nfd GIT_REPOSITORY https://github.com/btzy/nativefiledialog
 FetchContent_MakeAvailable(glfw glew glm imgui tomlplusplus nfd)
 
 find_package(OpenGL REQUIRED)
+find_package(Git)
 message("${CMAKE_PROJECT_NAME}: Binaries fetched.")
 
 file(GLOB_RECURSE SOURCES
     src/*.cpp
     headers/*.h
 )
+include_directories(${CMAKE_BINARY_DIR})
+
+if(GIT_EXECUTABLE)
+  execute_process(
+    COMMAND ${GIT_EXECUTABLE} describe --tags --match "v*"
+    WORKING_DIRECTORY "./"
+    OUTPUT_VARIABLE GIT_DESCRIBE_VERSION
+    RESULT_VARIABLE GIT_DESCRIBE_ERROR_CODE
+    OUTPUT_STRIP_TRAILING_WHITESPACE
+    )
+  if(NOT GIT_DESCRIBE_ERROR_CODE)
+    message(${GIT_DESCRIBE_VERSION})
+    set(STROOPWAFEL_VERSION ${GIT_DESCRIBE_VERSION})
+  endif()
+endif()
+
+configure_file(headers/StroopConfig.h.in StroopConfig.h)
 
 add_executable(${PROJECT_NAME} ${SOURCES})
 target_compile_definitions(${PROJECT_NAME} PRIVATE "DEBUG=$<IF:$<CONFIG:Debug>,1,0>")
 
-set_target_properties(StroopWafel PROPERTIES
+set_target_properties(${PROJECT_NAME} PROPERTIES
     VS_DEBUGGER_WORKING_DIRECTORY "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}"
 )
 
@@ -86,5 +105,5 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_directory
             "${CMAKE_SOURCE_DIR}/res"
-            "$<TARGET_FILE_DIR:StroopWafel>/res"
+            "$<TARGET_FILE_DIR:${PROJECT_NAME}>/res"
 )

@@ -11,6 +11,7 @@ class StroopConfig {
         static toml::parse_result GetConfig();
         static void Setup();
         static void SetImGuiStyle(ImGuiStyle &style) noexcept;
+        void SetVariables() noexcept;
 };
 
 #endif

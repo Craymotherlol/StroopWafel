@@ -26,6 +26,7 @@ private:
     Scene* currentScene = nullptr;
 
 public:
+     std::string id; // Easier for bool checks I don't have anything else in mind /shrug
 
     void Add(const std::string& name, std::unique_ptr<Scene> scene) {
         scenes[name] = std::move(scene);
@@ -34,6 +35,8 @@ public:
     void Set(const std::string& name) {
         auto it = scenes.find(name);
         if (it == scenes.end()) return;
+
+        id = name;
 
         if (currentScene) currentScene->End();
         currentScene = it->second.get();

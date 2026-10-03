@@ -3,6 +3,10 @@
 #include "GUIs/Menubar.h"
 #include "Scenes/SceneRenderer.h"
 
+ImVec2 LevelEditorUI::viewportSize;
+ImVec2 LevelEditorUI::viewportPos;
+
+
 void LevelEditorUI::Begin()
 {
     leveleditor_built = false;
@@ -93,13 +97,17 @@ void LevelEditorUI::Render()
     ImGui::End();
 
     ImGui::Begin("Viewport", NULL, ImGuiWindowFlags_NoDecoration);
-    ImVec2 viewportcurpos = ImGui::GetCursorScreenPos();
-    ImVec2 viewportsize = ImGui::GetWindowSize();
+    viewportPos = ImGui::GetCursorScreenPos();
+    ImVec2 tempViewportSize = ImGui::GetContentRegionAvail();
 
-    ImGui::Image((ImTextureID)(intptr_t)sceneFrameRenderer::Renderer.TEXTURE, viewportsize);
+    if (viewportSize.x != tempViewportSize.x || viewportSize.y != tempViewportSize.y) {
+        viewportSize = tempViewportSize;
+    }
+    ImGui::Image((ImTextureID)(intptr_t)sceneFrameRenderer::Renderer.TEXTURE, viewportSize);
+
     ImGui::End();
 
-    ImGui::SetNextWindowPos(ImVec2(viewportcurpos.x+5.0f, viewportcurpos.y+5.0f), 0 , ImVec2(0,0));
+    ImGui::SetNextWindowPos(ImVec2(viewportPos.x+5.0f, viewportPos.y+5.0f), 0 , ImVec2(0,0));
     ImGui::Begin("Toolbar", NULL, ImGuiWindowFlags_NoBackground | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoTitleBar);
     ToolbarWidget(CURRENT_TOOL);
     ImGui::End();

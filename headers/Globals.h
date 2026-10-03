@@ -4,7 +4,6 @@
 #include "window.h"
 #include "lib/IconsFontAwesome7.h"
 
-
 enum class ToolModes : int
 {
     SELECT,
@@ -12,12 +11,8 @@ enum class ToolModes : int
     ERASE
 };
 
-extern GLfloat DeltaTime;
-extern const std::string RESOURCE_PATH;
-extern const std::string SHADERS_PATH;
-extern const std::string FONTS_PATH;
 
+extern GLfloat DeltaTime;
 extern GLuint FallbackTexture;
-extern ImFont* fontIcons;
 
 #endif

@@ -11,7 +11,7 @@ elseif (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
 
 
     if(CMAKE_BUILD_TYPE STREQUAL "Debug")
-        #add_compile_options(-Wall)
+        add_compile_options(-Wall)
     endif()
     if(CMAKE_BUILD_TYPE STREQUAL "Release")
         add_compile_options(-01)

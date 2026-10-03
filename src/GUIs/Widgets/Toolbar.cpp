@@ -18,8 +18,7 @@ void ToolbarWidget(ToolModes &curtool)
                ImGui::PushStyleColor(ImGuiCol_Button, style.Colors[ImGuiCol_ButtonHovered]);
           }
 
-          ImGui::PushFont(fontIcons, 20.0f);
-          ImGui::PushStyleVar(ImGuiStyleVar_ButtonTextAlign, ImVec2(0.7f, 0.5f));
+          ImGui::PushFont(nullptr, 20.0f);
           if (ImGui::Button(buttonlabels[i].c_str(), ImVec2(30.0f, 30.0f))) {
                curtool = static_cast<ToolModes>(i);
 
@@ -32,7 +31,6 @@ void ToolbarWidget(ToolModes &curtool)
                     break;
                }
           }
-          ImGui::PopStyleVar();
           ImGui::PopFont();
 
           if (selected) {

@@ -17,8 +17,10 @@
 
 class WindowOptions {
 public:
-    ImVec2 WINDOWSIZE;
-    std::string WINDOWTITLE;
+    static ImVec2 windowSize;
+    static std::string windowTitle;
+    static int vSync;
 };
+
 
 #endif
