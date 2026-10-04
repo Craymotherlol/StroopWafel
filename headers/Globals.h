@@ -11,6 +11,8 @@ enum class ToolModes : int
     ERASE
 };
 
+extern float MousePosX;
+extern float MousePosY;
 
 extern GLfloat DeltaTime;
 extern GLuint FallbackTexture;

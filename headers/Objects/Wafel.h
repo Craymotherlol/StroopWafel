@@ -7,8 +7,6 @@
 #include "../Helpers/LoadTexture.h"
 #include "../window.h"
 
-// Yeah cute name :PPP
-
 // Frame buffers
 class WafelFrame
 {
@@ -16,14 +14,15 @@ private:
 public:
     unsigned int FBO, TEXTURE, RBO;
 
-    ~WafelFrame() {
+    ~WafelFrame()
+    {
         glDeleteRenderbuffers(1, &RBO);
         glDeleteTextures(1, &TEXTURE);
         glDeleteFramebuffers(1, &FBO);
     }
     void createFrameBuffer()
     {
-        //Frame Buffer
+        // Frame Buffer
         glGenFramebuffers(1, &FBO);
         glBindFramebuffer(GL_FRAMEBUFFER, FBO);
 
@@ -35,20 +34,21 @@ public:
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
         glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, TEXTURE, 0);
 
-        //Render buffer
+        // Render buffer
         glGenRenderbuffers(1, &RBO);
         glBindRenderbuffer(GL_RENDERBUFFER, RBO);
         glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, WindowOptions::windowSize.x, WindowOptions::windowSize.y);
         glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, RBO);
 
-        if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
+        if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+        {
             std::cout << "ERROR::FRAMEBUFFER:: Framebuffer is not complete!" << std::endl;
         }
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
         glBindTexture(GL_TEXTURE_2D, 0);
         glBindRenderbuffer(GL_RENDERBUFFER, 0);
 
-        //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+        // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     }
 
     void rescaleFrameBuffer(float WIDTH, float HEIGHT)

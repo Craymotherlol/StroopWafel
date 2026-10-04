@@ -5,6 +5,7 @@
 #include "Init.h"
 #include "Shortcuts.h"
 #include "Managers.h"
+#include "Objects/Camera.h"
 
 // GUIs
 #include <GUIs/MainMenu.h>

@@ -15,6 +15,14 @@ std::string WindowOptions::windowTitle = programName + STROOPWAFEL_VERSION;
 
 int WindowOptions::vSync = 1;
 
+
+extern "C"
+{
+    __declspec(dllexport) unsigned long NvOptimusEnablement = 0x00000001;
+    __declspec(dllexport) int AmdPowerXpressRequestHighPerformance = 1;
+}
+
+
 bool configExists(const std::string& filename) {
     return std::filesystem::exists(filename);
 }

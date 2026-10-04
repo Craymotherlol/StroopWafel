@@ -1,14 +1,13 @@
 #include "Shortcuts.h"
 #include "Window.h"
+#include "Globals.h"
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+
 
 bool WIREFRAMEMODE = false;
 
-void KeyboardCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
-{
-    if (key == GLFW_KEY_F1 && action == GLFW_PRESS) {
-        KeyShortcuts::toggleWireframeMode();
-    }
-}
 
 void KeyShortcuts::toggleWireframeMode() {
     WIREFRAMEMODE = !WIREFRAMEMODE;

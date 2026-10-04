@@ -51,6 +51,7 @@ if(GIT_EXECUTABLE)
   endif()
 endif()
 
+
 configure_file(headers/StroopConfig.h.in StroopConfig.h)
 
 add_executable(${PROJECT_NAME} ${SOURCES})

@@ -2,7 +2,6 @@
 #define STROOP_GL_MESH_H
 #include "Window.h"
 #include <Objects/Shader.h>
-#include <glm/glm.hpp>
 #include <vector>
 
 struct Vertex
