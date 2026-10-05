@@ -80,10 +80,13 @@ private:
     float lastY = WindowOptions::windowSize.y / 2.0f;
 
     bool firstMouse = true;
+    WafelFrame Renderer;
+    Camera camera;
 
 public:
-    static WafelFrame Renderer;
-    static Camera camera;
+
+    static Camera* camptr;
+    static WafelFrame* rendererptr;
 
     sceneFrameRenderer() {};
 

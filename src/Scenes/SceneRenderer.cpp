@@ -1,11 +1,13 @@
 #include "Scenes/SceneRenderer.h"
 
-// C++ developer puts static variables inside classes the old fashioned way
-WafelFrame sceneFrameRenderer::Renderer;
-Camera sceneFrameRenderer::camera;
+Camera* sceneFrameRenderer::camptr;
+WafelFrame* sceneFrameRenderer::rendererptr;
 
 void sceneFrameRenderer::Begin()
 {
+    camptr = &camera;
+    rendererptr = &Renderer;
+
     FrameBufferShader.Use();
     FrameBufferShader.setInt("screenTexture", 0);
 
@@ -33,6 +35,8 @@ void sceneFrameRenderer::Begin()
 
 void sceneFrameRenderer::End()
 {
+    camptr = nullptr;
+    rendererptr = nullptr;
     CryingMoon.reset();
 }
 
@@ -104,6 +108,7 @@ void sceneFrameRenderer::ProcessInput(GLFWwindow *window)
     }
 
     if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_MIDDLE) == GLFW_RELEASE) {
+        // Prevent snapping for the camera
         firstMouse = true;
         glfwSetInputMode(glfwGetCurrentContext(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
     }

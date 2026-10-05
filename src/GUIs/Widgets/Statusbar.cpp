@@ -4,7 +4,6 @@
 void StatusbarWidget(float regionY)
 {
      ImGuiStyle &style = ImGui::GetStyle();
-     Camera& cam = sceneFrameRenderer::camera;
 
      ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
      ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0);
@@ -27,7 +26,7 @@ void StatusbarWidget(float regionY)
 
      Text = "Camera: (X: %f Y: %f)";
      textSize = ImGui::CalcTextSize(Text.c_str());
-     ImGui::Text(Text.c_str(), cam.Position.x, cam.Position.y);
+     ImGui::Text(Text.c_str(), sceneFrameRenderer::camptr->Position.x, sceneFrameRenderer::camptr->Position.y);
 
      ImGui::End();
 

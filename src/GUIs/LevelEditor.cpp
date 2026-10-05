@@ -104,7 +104,7 @@ void LevelEditorUI::Render()
     if (viewportSize.x != tempViewportSize.x || viewportSize.y != tempViewportSize.y) {
         viewportSize = tempViewportSize;
     }
-    ImGui::Image((ImTextureID)(intptr_t)sceneFrameRenderer::Renderer.TEXTURE, viewportSize, ImVec2(0,1), ImVec2(1,0));
+    ImGui::Image((ImTextureID)sceneFrameRenderer::rendererptr->TEXTURE, viewportSize, ImVec2(0,1), ImVec2(1,0));
 
     ImGui::End();
 

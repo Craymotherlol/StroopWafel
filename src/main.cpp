@@ -185,7 +185,7 @@ void framebufferSizeCallback(GLFWwindow *window, int width, int height)
 
     if (scenemanager.id == "scenerenderer")
     {
-        sceneFrameRenderer::Renderer.rescaleFrameBuffer(width, height);
+        sceneFrameRenderer::rendererptr->rescaleFrameBuffer(width, height);
     }
 
     std::cout << "WINDOW RESIZED" << "\n";
