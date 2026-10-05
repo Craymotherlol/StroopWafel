@@ -4,7 +4,8 @@
 #include "Globals.h"
 #include "../window.h"
 
-enum CameraDir {
+enum CameraDir
+{
     FORWARD,
     BACKWARD,
     LEFT,
@@ -14,13 +15,13 @@ enum CameraDir {
 const float YAW = -90.0f;
 const float PITCH = 0.0f;
 const float SPEED = 2.5f;
-const float SENSITIVITY = 0.1f;
+const float SENSITIVITY = 0.005f;
 const float ZOOM = 45.0f;
 
 class Camera
 {
 public:
-
+    bool TwoDimensional = true;
     glm::vec3 Position;
     glm::vec3 Front;
     glm::vec3 Up;
@@ -34,7 +35,7 @@ public:
     float MouseSensitivity;
     float Zoom;
 
-    Camera(glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f), float yaw = YAW, float pitch = PITCH) : Front(glm::vec3(0.0f, 0.0f, -1.0f)), MovementSpeed(SPEED), MouseSensitivity(SENSITIVITY), Zoom(ZOOM)
+    Camera(glm::vec3 position = glm::vec3(0.0f, 0.0f, 2.5f), glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f), float yaw = YAW, float pitch = PITCH) : Front(glm::vec3(0.0f, 0.0f, -1.0f)), MovementSpeed(SPEED), MouseSensitivity(SENSITIVITY), Zoom(ZOOM)
     {
         Position = position;
         WorldUp = up;
@@ -61,9 +62,9 @@ public:
     {
         float velocity = MovementSpeed * DeltaTime;
         if (direction == FORWARD)
-            Position += Front * velocity;
+            Position += Up * velocity;
         if (direction == BACKWARD)
-            Position -= Front * velocity;
+            Position -= Up * velocity;
         if (direction == LEFT)
             Position -= Right * velocity;
         if (direction == RIGHT)
@@ -75,7 +76,7 @@ public:
         xoffset *= MouseSensitivity;
         yoffset *= MouseSensitivity;
 
-        Yaw   += xoffset;
+        Yaw += xoffset;
         Pitch += yoffset;
 
         if (constrainPitch)
@@ -86,7 +87,13 @@ public:
                 Pitch = -89.0f;
         }
 
-        updateCameraVectors();
+        if (!TwoDimensional)
+        {
+            updateCameraVectors();
+        } else {
+            Position += Up * yoffset;
+            Position += Right * xoffset;
+        }
     }
 
     void ProcessMouseScroll(float yoffset)
@@ -107,7 +114,7 @@ private:
         front.z = sin(glm::radians(Yaw)) * cos(glm::radians(Pitch));
         Front = glm::normalize(front);
         Right = glm::normalize(glm::cross(Front, WorldUp));
-        Up    = glm::normalize(glm::cross(Right, Front));
+        Up = glm::normalize(glm::cross(Right, Front));
     }
 };
 

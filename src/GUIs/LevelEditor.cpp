@@ -1,5 +1,6 @@
 #include "GUIs/LevelEditor.h"
 #include "GUIs/Widgets/Toolbar.h"
+#include "GUIs/Widgets/Statusbar.h"
 #include "GUIs/Menubar.h"
 #include "Scenes/SceneRenderer.h"
 
@@ -30,7 +31,7 @@ void LevelEditorUI::Render()
     glfwGetWindowSize(window, &tmpw, &tmph);
 
     ImGui::SetNextWindowPos(ImVec2(0, ImGui::GetFrameHeight()));
-    ImGui::SetNextWindowSize(ImVec2(tmpw, tmph - ImGui::GetFrameHeight()));
+    ImGui::SetNextWindowSize(ImVec2(tmpw, tmph - ImGui::GetFrameHeight() - 15));
 
     ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
     ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
@@ -120,4 +121,6 @@ void LevelEditorUI::Render()
     ImGui::End();
 
     ImGui::PopStyleVar(3);
+
+    StatusbarWidget(tmph - ImGui::GetFrameHeight());
 }

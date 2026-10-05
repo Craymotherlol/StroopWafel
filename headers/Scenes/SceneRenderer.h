@@ -83,7 +83,7 @@ private:
 
 public:
     static WafelFrame Renderer;
-    Camera camera;
+    static Camera camera;
 
     sceneFrameRenderer() {};
 

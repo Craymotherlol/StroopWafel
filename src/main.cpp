@@ -18,7 +18,7 @@ void mouseCallback(GLFWwindow *window, double xposIn, double yposIn);
 
 int main()
 {
-    std::cout << "Running StroopWafel v" << STROOPWAFEL_VERSION << "\n";
+    std::cout << "Running StroopWafel " << STROOPWAFEL_VERSION << "\n";
     StroopConfig::Setup();
     GLFWwindow *window;
     GLFWmonitor *monitor;
