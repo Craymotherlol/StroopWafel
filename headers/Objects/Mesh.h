@@ -56,7 +56,6 @@ private:
 
     void SetupData()
     {
-        std::cout << "Generating Data:" << &VAO << "\n";
         glGenVertexArrays(1, &VAO);
         glGenBuffers(1, &VBO);
         glGenBuffers(1, &EBO);
@@ -84,8 +83,6 @@ private:
         glBindBuffer(GL_ARRAY_BUFFER, 0);
 
         glBindVertexArray(0);
-
-        std::cout << "Done generating:" << &VAO << "\n";
     }
 };
 #endif

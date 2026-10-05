@@ -1,6 +1,7 @@
 #include "Init.h"
 #include <iostream>
 #include <filesystem>
+//#include "Helpers/Logging.h"
 #include "StroopConfig.h"
 
 const std::string RESOURCES_PATH = "res/";
@@ -54,12 +55,12 @@ void StroopConfig::Setup()
         	cfg = GetConfig();
 
 			if (cfg.contains("WINDOW")) {
-				std::cout << "\033[35m" << "[SUCCESS] "  << "\033[0m" << "Config: Parsed file" << "\n";
+				//wafelLog(wafelLogLevel::SUCCESS, wafelSource::CONFIG, "Initialized");
 			} else {
 				throw 001;
 			}
 		} catch (int error) {
-			std::cout << "\033[31m" << "[ERROR]" << error << "\033[0m" << "Config: Failed to parse file" << "\n";
+			//wafelLog(wafelLogLevel::WARNING, wafelSource::CONFIG, "Could not initialize! Is your config Read-only?");
 		}
 
         if (cfg.contains("[WINDOW]"))

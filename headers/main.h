@@ -6,6 +6,7 @@
 #include "Shortcuts.h"
 #include "Managers.h"
 #include "Objects/Camera.h"
+#include "Helpers/Logging.h"
 
 // GUIs
 #include <GUIs/MainMenu.h>

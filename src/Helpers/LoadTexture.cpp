@@ -31,8 +31,6 @@ bool LoadTextureFromMemory(const void *data, size_t data_size, GLuint *out_textu
     *out_width = image_width;
     *out_height = image_height;
 
-    std::cout << "LOGO:" << image_texture << "\n";
-
     return true;
 }
 
@@ -94,7 +92,6 @@ GLuint SetTextureFromFile(std::string file_name)
 
     if (data && glewInit)
     {
-        std::cout << "Generating data for: " << file_name << "\n";
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
         glGenerateMipmap(GL_TEXTURE_2D);
     }
